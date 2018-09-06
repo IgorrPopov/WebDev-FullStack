@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>3 column layout</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    header {
+      background-color: silver;
+      height: 10%;
+    }
+
+    footer {
+      background-color: aqua;
+      height: 10%;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: 25% 50% 25%;
+      min-height: 80%; /* make sticky footer */
+    }
+
+    .columns__one {
+      background-color: blue;
+    }
+
+    .columns__two {
+      background-color: gray;
+    }
+
+    .columns__three {
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <header>Header</header>
+  <div class="columns">
+    <div class="columns__one"> Menu </div>
+    <div class="columns__two"> Content
+      <p>
+        Lorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad consequuntur deleniti
+        dolorem dolores libero molestias nemo perspiciatis similique ut voluptatibus!
+        Dignissimos earum eum explicabo necessitatibus porro quae quia velit veniam!
+      </p>
+    </div>
+    <div class="columns__three"> Actions </div>
+  </div>
+  <footer>Footer</footer>
+</body>
+</html>

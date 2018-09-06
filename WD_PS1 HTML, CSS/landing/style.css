@@ -1,0 +1,114 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  min-width: 1024px; /* width of min popular desktop screen resolution */
+  max-width: 1920px; /* width of max popular desktop screen resolution */
+  font-family: Vernada, sans-serif;
+}
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header__logo {
+  margin: 5px;
+  height: 120px;
+  width: auto;
+  background-color: #fff200;
+  border-radius: 100%; /* makes an object round */
+}
+
+.header__pages {
+  margin-left: auto; /* push push three blocks into the right */
+}
+
+.header__pages > * {
+  margin: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  color: black;
+}
+/* Banner */
+.banner {
+  background-color: #fff200;
+  display: flex;
+}
+
+.banner__app-description {
+  max-width: 800px;
+  padding-right: 5%;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.banner__phone-image {
+  padding: 30px 10% 30px 15%; /* plus 5% form banner__app-description padding-right */
+  width: auto;
+  height: 500px;
+}
+
+.banner__app-description > button, .form__button { /* Identical styling of banner and forms buttons*/
+  background-color: #fff200;
+  border-radius: 15%; /*round the corners of the button*/
+  width: 120px;
+  height: 50px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.banner__app-description > * {
+  margin: 20px;
+  padding: 0;
+}
+/* Services */
+.services {
+  margin: 50px;
+  display: flex;
+  text-align: center;
+}
+
+.services__icon-color {
+  color: #fff200;
+}
+
+.services_container-for-icon {
+  font-size: 40px;
+}
+
+.services p {
+  margin: 0;
+}
+/* Form */
+.form {
+  background-color: #fff200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form__table {
+  width: 400px;
+  padding-top: 20px;
+}
+
+.form__text-field {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 20px;
+}
+
+.form__textarea {
+  width: 100%;
+  height: 100px;
+  resize: none;
+}
+/* Search */
+.search {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  background-color: #fff200;
+}
