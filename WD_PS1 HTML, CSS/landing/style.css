@@ -28,6 +28,12 @@ html, body {
   text-decoration: none;
   font-weight: bold;
   color: black;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+}
+
+.header__pages > *:hover {
+  color: #4cd137;
 }
 /* Banner */
 .banner {
@@ -127,20 +133,17 @@ html, body {
 .forms__block--row {
   padding: 5px;
   display: flex;
+  justify-content: flex-end;
 }
 /* do not touch the form elements that are not text input fields */
 .forms__block--row input:not(.not-text-field) {
   height: 20px;
   flex: 2;
+  max-width: 280px;
 }
 
 .forms__block--row input {
   margin-left: 10px;
-}
-
-.forms__block--row label {
-  flex: 1;
-  text-align: right;
 }
 
 .forms__block--row textarea {
@@ -148,6 +151,10 @@ html, body {
   flex: 1;
   height: 100px;
   resize: none;
+}
+
+[for=male], [for=female], [for=other] {
+  padding-left: 10px;
 }
 /* Search */
 .search {

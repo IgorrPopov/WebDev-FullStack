@@ -129,10 +129,6 @@
     <h2>Tell us about yourself,<br>fill out our form please!</h2>
     <form>
       <div class="forms__block--row">
-        <label for="avatar">Add your photo!</label>
-        <input type="file" name="avatar" id="avatar">
-      </div>
-      <div class="forms__block--row">
         <label for="name-form">Your name: </label>
         <input type="text" id="name-form" name="name" placeholder="Type here your name, please">
       </div>
@@ -169,7 +165,11 @@
         <input type="number" name="number" id="number">
       </div>
       <div class="forms__block--row">
-        Select your gender!<br>
+        <label for="avatar">Add your photo!</label>
+        <input type="file" name="avatar" id="avatar">
+      </div>
+      <div class="forms__block--row">
+        Select your gender!
         <label for="male">Male</label>
         <input type="radio" name="gender" value="male" id="male" class="not-text-field">
         <label for="female">Female</label>
