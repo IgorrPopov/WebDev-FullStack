@@ -1,14 +1,35 @@
 html, body {
   margin: 0;
   padding: 0;
-  min-width: 1024px; /* width of min popular desktop screen resolution */
-  max-width: 1920px; /* width of max popular desktop screen resolution */
   font-family: Vernada, sans-serif;
+}
+/* Wrappers */
+.banner__wrapper, .header__wrapper, .services__wrapper, .search__wrapper {
+  width: 960px;
+}
+
+.banner__wrapper, .header__wrapper, .services__wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.services__wrapper {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.services__wrapper div{
+  width: 320px;
+}
+
+.search__wrapper {
+  display: flex;
+  justify-content: flex-end;
 }
 /* Header */
 .header {
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
 .header__logo {
@@ -39,6 +60,7 @@ html, body {
 .banner {
   background-color: #4cd137;
   display: flex;
+  justify-content: center;
 }
 
 .banner__app-description {
@@ -93,8 +115,10 @@ html, body {
 /* Services */
 .services {
   margin: 50px;
-  display: flex;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .services__icon-color {
@@ -102,19 +126,19 @@ html, body {
 }
 
 .services_container-for-icon {
+  margin-top: 20px;
   font-size: 30px;
 }
 
 .services p {
   margin: 0;
 }
-/* Form */
+/* Forms */
 .forms {
   background-color: #4cd137;
   color: #ffffff;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
 }
 
 .forms__block {
@@ -135,8 +159,9 @@ html, body {
   display: flex;
   justify-content: flex-end;
 }
-/* do not touch the form elements that are not text input fields */
-.forms__block--row input:not(.not-text-field) {
+
+input[type=text], [type=tel], [type=email], [type=password], [type=date],[type=url],
+     [type=datetime-local], [type=time], [type=number], [type=month], [type=file]{
   height: 20px;
   flex: 2;
   max-width: 280px;
@@ -158,8 +183,8 @@ html, body {
 }
 /* Search */
 .search {
-  display: flex;
-  justify-content: flex-end;
   padding: 20px;
   background-color: #4cd137;
+  display: flex;
+  justify-content: center;
 }
