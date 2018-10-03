@@ -51,7 +51,8 @@
 <section class="assignment">
   <div>
     <h1>Task 5</h1>
-    <label for="age">label</label>
+    <h3>For the given age of the student, print the phrase "22 года" (1 год, 20 лет....)</h3>
+    <label for="age">Age: </label>
     <input type="text" id="age">
     <button onclick="age(document.getElementById('age').value)">Go!</button>
     <p id="task5"></p>
@@ -60,13 +61,25 @@
 <section class="assignment">
   <div>
     <h1>Task 6</h1>
-    <input type="month" id="">
+    <h3>
+      Calculate the time period. The user enters two dates (in the format "October 13, 2014 11:13:00" ).
+      Calculate the interval of time passed between the dates and get an array in which there will be
+      a year (365 days), a month (30 days), days, hours, minutes, seconds. Output to the user
+      (for example): между датами прошло 2 года, 1 месяц, 3 дня, 5 часов, 10 минут, 15 секунд
+    </h3>
+    <label for="first-date">First date: </label>
+    <input type="text" id="first-date" value="October 13, 2014 11:13:00">
+    <label for="second-date">Second date: </label>
+    <input type="text" id="second-date" value="October 13, 2014 11:13:00">
+    <!--<button onclick="random(document.getElementById('first-date').value)">Go!</button>-->
+    <button onclick="timeInterval(document.getElementById('first-date').value,
+      document.getElementById('second-date').value)">Go!</button>
+    <p id="task6"></p>
   </div>
 </section>
 <section class="assignment">
   <div>
     <h1>Task 7</h1>
-    <form action="" class="task7"></form>
   </div>
 </section>
 <section class="assignment">
