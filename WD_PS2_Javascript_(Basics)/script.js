@@ -143,13 +143,6 @@ function calculatingDateDifference(startDate, finishDate) {
         monthsDifference -= 12;
         yearsDifference++;
     }
-
-    console.log('yearsDifference: ' + yearsDifference);
-    console.log('monthsDifference: ' + monthsDifference);
-    console.log('daysDifference: ' + daysDifference);
-    console.log('hoursDifference: ' + hoursDifference);
-    console.log('minutesDifference: ' + minutesDifference);
-    console.log('secondsDifference: ' + secondsDifference);
 }
 
 function timeInterval(firstDate, secondDate) {
@@ -237,21 +230,21 @@ function checkMonth(inputMonth) {
 
 
 
-// function chessBoard() {
-//     let chessDimension = Number(document.getElementById('chessDimension').value);
-//     console.log(typeof chessDimension);
-//     console.log(chessDimension);
-//
-//     if(Number.isInteger(chessDimension) && chessDimension > 0){
-//         printChessBoard(chessDimension);
-//     } else {
-//         alert('Please enter a positive integer greater than zero!');
-//     }
-//
-//     function printChessBoard(chessDimension) {
-//
-//     }
-// }
+function chessBoard() {
+    let chessDimension = Number(document.getElementById('chessDimension').value);
+    console.log(typeof chessDimension);
+    console.log(chessDimension);
+
+    if(Number.isInteger(chessDimension) && chessDimension > 0){
+        printChessBoard(chessDimension);
+    } else {
+        alert('Please enter a positive integer greater than zero!');
+    }
+
+    function printChessBoard(chessDimension) {
+
+    }
+}
 
 
 
