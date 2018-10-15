@@ -11,11 +11,72 @@ body {
   margin-top: 20px;
   margin-left: 20px;
   margin-right: 20px;
-  min-height: 200px;
   border-radius: 20px;
   color: white;
 }
 
 body .assignment:nth-child(11) {
   margin-bottom: 20px;
+}
+
+#zodiac_sign {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 20px;
+}
+
+#zodiac_sign_name {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+  text-align: center;
+}
+
+input {
+  width: 180px;
+  border-radius: 5px;
+  outline: none;
+}
+
+button { /* Identical styling of banner and forms buttons*/
+  font-weight: bold;
+  background-color: #fff200;
+  color: #000000;
+  border: 2px solid #fff200;
+  border-radius: 5px; /*round the corners of the button*/
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 2px #3d3d3d;
+  transition-duration: 0.4s;
+}
+
+button:active{
+  box-shadow: 0 0 #3d3d3d;
+  transform: translateY(2px);
+}
+
+.apartment-input__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.apartment-input__wrapper--block input {
+  margin: 5px 5px;
+  width: 50px;
+}
+
+#textarea {
+  resize: none;
+  width: 500px;
+  height: 300px;
+  border-radius: 5px;
+  outline: none;
+}
+
+.chess-board {
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
 }

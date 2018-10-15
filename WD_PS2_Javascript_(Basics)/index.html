@@ -6,56 +6,62 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
-  <title>Document</title>
+  <title>WD_PS2 Javascript (Basics)</title>
 </head>
 <body>
 <section class="assignment">
   <div>
-    <h2>Task 1</h2>
-    <h3>Calculate the sum of the numbers from -1000 to 1000</h3>
-    <button onclick="addition('task1', true)">Go!</button>
+    <h1>Task 1</h1>
+    <h3>Calculate the sum of the numbers from -1000 to 1000.</h3>
+    <button onclick="addition('task1', false)">Go!</button>
+    <button onclick="addInnerHTML('task1', 'Result of addition: ')">Clear!</button>
     <p id="task1">Result of addition: </p>
   </div>
 </section>
 <section class="assignment">
   <div>
-    <h2>Task 2</h2>
-    <h3>Calculate the sum of the numbers from -1000 to 1000, summing only the numbers  that end at 2, 3 and 7</h3>
-    <button onclick="addition('task2', [2, 3, 7])">Go!</button>
+    <h1>Task 2</h1>
+    <h3>Calculate the sum of the numbers from -1000 to 1000, summing only the numbers  that end at 2, 3 and 7.</h3>
+    <button onclick="addition('task2', true)">Go!</button>
+    <button onclick="addInnerHTML('task2', 'Result of addition: ')">Clear!</button>
     <p id="task2">Result of addition: </p>
   </div>
 </section>
 <section class="assignment">
-  <div id="assignment__task3">
+  <div>
     <h1>Task 3</h1>
-    <h2>Display on the page a list of 50 elements of the form:<br>
+    <h3>
+      Display on the page a list of 50 '*' elements of the form:<br>
       *<br>
       * *<br>
       * * *<br>
       ...
-    </h2>
-    <button id="task3" onclick="printTriangle()">Go!</button>
+    </h3>
+    <button onclick="printTriangle('task3')">Go!</button>
+    <button onclick="addInnerHTML('task3', '')">Clear!</button>
+    <div id="task3"></div>
   </div>
 </section>
 <section class="assignment">
   <div>
     <h1>Task 4</h1>
-    <h3> The user enters the time in seconds. Output in the format: hh: mm: ss  (01:05:20)</h3>
-    <label for="timeFormat">Input time in seconds: </label>
-    <input type="text" id="timeFormat">
-    <button onclick="convertSeconds(document.getElementById('timeFormat').value)">Go!</button>
+    <h3>The user enters the time in seconds. Output in the format: hh: mm: ss  (01:05:20).</h3>
+    <label for="time">Input time in seconds: </label>
+    <input type="text" id="time">
+    <button onclick="convertSeconds('task4', document.getElementById('time').value)">Go!</button>
+    <button onclick="clearTextArea('time'); addInnerHTML('task4', 'Output format: ')">Clear!</button>
     <p id="task4">Output format: </p>
   </div>
 </section>
 <section class="assignment">
   <div>
     <h1>Task 5</h1>
-    <h3>For the given age of the student, print the phrase "22 года" (1 год, 20 лет....)</h3>
+    <h3>For the given age of the student, print the phrase "22 года" (1 год, 20 лет.... etc.).</h3>
     <label for="age">Age: </label>
     <input type="text" id="age">
-    <button onclick="age(document.getElementById('age').value)">Go!</button>
-    <p id="task5"></p>
+    <button onclick="age('task5', document.getElementById('age').value)">Go!</button>
+    <button onclick="clearTextArea('age'); addInnerHTML('task5', 'Возраст студента: ')">Clear!</button>
+    <p id="task5">Возраст студента: </p>
   </div>
 </section>
 <section class="assignment">
@@ -65,51 +71,117 @@
       Calculate the time period. The user enters two dates (in the format "October 13, 2014 11:13:00" ).
       Calculate the interval of time passed between the dates and get an array in which there will be
       a year (365 days), a month (30 days), days, hours, minutes, seconds. Output to the user
-      (for example): между датами прошло 2 года, 1 месяц, 3 дня, 5 часов, 10 минут, 15 секунд
+      (for example): "между датами прошло 2 года, 1 месяц, 3 дня, 5 часов, 10 минут, 15 секунд".
     </h3>
     <label for="first-date">First date: </label>
-    <input type="text" id="first-date" value="October 13, 2014 11:13:00">
+    <input type="text" id="first-date">
     <label for="second-date">Second date: </label>
-    <input type="text" id="second-date" value="October 13, 2014 11:13:00">
-    <!--<button onclick="random(document.getElementById('first-date').value)">Go!</button>-->
-    <button onclick="timeInterval(document.getElementById('first-date').value,
+    <input type="text" id="second-date">
+    <button onclick="timeInterval('task6', document.getElementById('first-date').value,
       document.getElementById('second-date').value)">Go!</button>
-    <p id="task6"></p>
+    <button onclick="clearTextArea('first-date'); clearTextArea('second-date');
+      addInnerHTML('task6', 'Между датами прошло')">Clear!</button>
+    <button onclick="randomDate('first-date', 'second-date')">Random dates!</button>
+    <p id="task6">Между датами прошло</p>
   </div>
 </section>
 <section class="assignment">
   <div>
     <h1>Task 7</h1>
+    <h3>
+      Signs of the zodiac <br>
+      The user enters the date in the format of 2014-12-31, and receives a zodiac sign of that day
+      (with a picture).
+    </h3>
+    <label for="zodiac">Date of Birth: </label>
+    <input type="text" id="zodiac">
+    <button onclick="zodiacSigns('zodiac_sign', 'zodiac_sign_name',
+      document.getElementById('zodiac').value)">Go!</button>
+    <button onclick="clearTextArea('zodiac'); addInnerHTML('zodiac_sign_name', '');
+      document.getElementById('zodiac_sign').setAttribute('src', '')">Clear!</button>
+    <p id="zodiac_sign_name"></p>
+    <img src="" id="zodiac_sign" align="center">
   </div>
 </section>
 <section class="assignment">
-  <div id="task8">
+  <div>
     <h1>Task 8</h1>
-    <h2>Chess board<br>
+    <h3>
+      Chess board<br>
       The user enters the dimensions of the board (in the format '8x8'). Bring out the chessboard.
-    </h2>
-      <label for="chessDimension">Enter the dimensions of the board: </label>
-      <input type="text" value="" id="chessDimension">
-      <input type="button" value="Go!" onclick="chessBoard()">
+    </h3>
+      <label for="dimension">Enter the dimensions of the board: </label>
+      <input type="text" value="" id="dimension">
+      <button onclick="chessBoard('task8', 'chess_bord_message',  document.getElementById('dimension').value)">Go!</button>
+      <button onclick="clearTextArea('dimension'); addInnerHTML('chess_bord_message', '');
+        removeChessBoard('task8')">Clear!</button>
+      <p id="chess_bord_message"></p>
+    <div id="task8" class="chess-board"></div>
   </div>
 </section>
 <section class="assignment">
   <div>
     <h1>Task 9</h1>
-    <form action="" class="task9"></form>
+    <h3>
+      Determine the entrance number and floor by apartment number. <br>
+      The number of entrances, apartments on the entrances, the number of floors
+      of the house also sets the user in input.
+    </h3>
+    <div class="apartment-input__wrapper">
+      <div class="apartment-input__wrapper--block">
+        <label for="entrances">How many entrances: </label>
+        <input type="number" id="entrances">
+      </div>
+      <div class="apartment-input__wrapper--block">
+        <label for="apartments">How many apartments in one floor of one entrance: </label>
+        <input type="number" id="apartments">
+      </div>
+      <div class="apartment-input__wrapper--block">
+        <label for="floors">How many floors in the building: </label>
+        <input type="number" id="floors">
+      </div>
+      <div class="apartment-input__wrapper--block">
+        <label for="apartment_number">Apartment number: </label>
+        <input type="number" id="apartment_number">
+        <button onclick="apartmentMath(document.getElementById('entrances').value,
+                                       document.getElementById('apartments').value,
+                                       document.getElementById('floors').value,
+                                       document.getElementById('apartment_number').value,
+                                       'task9')">
+          Go!
+        </button>
+        <button onclick="clearTextArea('entrances'); clearTextArea('apartments'); clearTextArea('floors');
+          clearTextArea('apartment_number'); addInnerHTML('task9', 'Entrance and floor numbers: ')">Clear!</button>
+      </div>
+    </div>
+      <p id="task9">Entrance and floor numbers: </p>
   </div>
 </section>
 <section class="assignment">
   <div>
     <h1>Task 10</h1>
-    <form action="" class="task10"></form>
+    <h3>Find the sum of digits of the entered number.</h3>
+    <label for="sum-of-digits">Enter a number: </label>
+    <input type="text" id="sum-of-digits">
+    <button onclick="sumOfDigits(document.getElementById('sum-of-digits').value, 'task10')">Go!</button>
+    <button onclick="clearTextArea('sum-of-digits'); addInnerHTML('task10', 'The sum of digits: ')">Clear!</button>
+    <p id="task10">The sum of digits: </p>
   </div>
 </section>
 <section class="assignment">
   <div>
     <h1>Task 11</h1>
-    <form action="" class="task11"></form>
+    <h3>
+      Given a certain textarea, in which the user enters the links separated by commas.
+      When textarea becomes inactive, remove http:// and https:// from the links and
+      display them in a list of links sorted alphabetically.
+    </h3>
+      <label for="textarea">Links list: </label><br>
+      <textarea id="textarea" onblur="linksAlphabet(this.value, 'task11')"></textarea><br>
+      <button onclick="clearLinks('textarea', 'task11')">Clear!</button>
+      <div id="task11"></div>
   </div>
 </section>
+<script src="script.js"></script>
 </body>
 </html>
