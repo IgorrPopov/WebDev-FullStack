@@ -1,61 +1,16 @@
-// Text messages
-const WRONG_DATE_MESSAGE = 'You entered dates with errors! Please check the input and try again.';
-const OUTPUT_FORMAT_MESSAGE =  'Output format: ';
+// Text message
 const INVALID_INPUT_MESSAGE = 'Invalid input, please try again!';
-const ADDITION_RESULT_MESSAGE = 'Result of addition: ';
-const STUDENT_AGE_MESSAGE = 'Возраст студента: ';
-const DIGITS_SUM_MESSAGE = 'The sum of digits: ';
-const WRONG_APARTMENT_NUMBER_MESSAGE = 'Wrong apartment number! The building has no apartment with this number.';
-const ENTRANCE_AND_FLOOR_NUM_MASSAGE = 'Entrance and floor numbers ';
-const TIME_DIFFERENCE_MESSAGE = 'Между датами прошло';
-// Regular expressions
-const MATCH_INPUT_DATE = /^[jfmasondJFMASOND][a-zA-Z]{2,8}\s[0-9]{1,2},\s[0-9]*\s[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}$/g;
-const DIGIT = /\d/g;
-const NOT_DIGIT = /\D/g;
-const TWO_AND_MORE_COMMAS = /,{2,}/;
-const WHITE_SPACE = /\s/g;
-const MATCH_INPUT_DIMENSION = /^\d+[xX]\d+$/g;
-const MATCH_DOB = /^\d{4}-\d{1,2}-\d{1,2}$/g;
-const HTTP_S = /http[s]?:[/]+/g;
-const DATE_ELEMENTS_SEPARATOR = /[\s,:]+/;
 // Arrays with time units names
 const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july',
     'august', 'september', 'october', 'november', 'december'];
 const DATE_ELEMENTS_NAMES = [['год', 'года', 'лет'], ['месяц', 'месяца', 'месяцев'],
     ['день', 'дня', 'дней'], ['час', 'часа', 'часов'], ['минута', 'минуты', 'минут'],
     ['секунда', 'секунды', 'секунд']];
-// Zodiac sings ranges and names of each sign
-const ZODIAC_SIGNS_RANGE = [[3, 21, 4, 20, 'Aries'],[4, 21, 5, 21, 'Taurus'], [5, 22, 6, 21, 'Gemini'],
-    [6, 22, 7, 23, 'Cancer'], [7, 24, 8, 23, 'Leo'], [8, 24, 9, 23, 'Virgo'], [9, 24, 10, 23, 'Libra'],
-    [10, 24, 11, 22, 'Scorpio'], [11, 23, 12, 21, 'Sagittarius'], [12, 22, 1, 20, 'Capricorn'],
-    [1, 21, 2, 19, 'Aquarius'], [2, 20, 3, 20, 'Pisces']];
 // Numeric constants
-const STARS_IN_TRIANGLE = 50;
-const SECONDS_IN_HOUR = 3600;
-const SECONDS_IN_MINUTE = 60;
-const MINUTES_IN_HOUR = 60;
-const HOURS_IN_DAY = 24;
 const MONTHS_IN_YEAR = 12;
-const FEBRUARY = 2;
-const LEAP_YEAR = 4;
-const AMOUNT_OF_VALID_ARGUMENTS = 4;
 const HOURS_RANGE = 23;
 const MINUTES_AND_SECONDS_RANGE = 59;
 const RANDOM_YEAR = 2050;
-const CHESS_BOARD_CELL_SIZE_IN_PX = 30;
-const ADDITION_MIN = -10000;
-const ADDITION_MAX = 10000;
-const ADDITION_IF = [2, 3, 7];
-const DAYS_OF_MONTHS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-const DATE_ARRAY_INDEXES = [2, 0, 1, 3, 4, 5]; // from years to seconds
-// Colors of chess boards cells
-const FIRST_CELL_COLOR = '#000000';
-const SECOND_CELL_COLOR = '#ffffff';
-// Pictures extension and path to folder with images
-const IMAGES_PATH = 'pictures/';
-const IMAGES_FILE_FORMAT = '.jpg';
-// Adding zero if time element less than 10
-const TIME_PART = input => input <= 9 ? `0${input}` : input; // add zero if we have one digit
 
 // Tasks 1 & 2 _ _ _ _ _ _ _ _ _ _ _
 
@@ -64,23 +19,15 @@ const TIME_PART = input => input <= 9 ? `0${input}` : input; // add zero if we h
  * Second task - find sum of the numbers from -1000 to 1000,
  * summing only the numbers  that end at 2, 3, and 7
  * @param id of the tag that will show the result
- * @param additionCondition - addition with condition or not
+ * @param condition - addition with condition or not
  */
-function addition(id, additionCondition) {
+function addition(id, condition = false) {
     let sum = 0;
-    if(!additionCondition) { // simple addition
-        for (let i = ADDITION_MIN; i <= ADDITION_MAX; i++) {
-            sum += i;
-        }
-    } else { // addition with condition
-        for (let i = ADDITION_MIN; i <= ADDITION_MAX; i++){
-            let lastDigit = Number(i.toString().slice(-1));
-            if(ADDITION_IF.some((n) => n === lastDigit)){
-                sum += i;
-            }
-        }
+    const getNum = number => (!condition || [2, 3, 7].includes(Math.abs(number % 10))) ? number : 0;
+    for (let i = -1000; i <= 1000; i++) {
+        sum += getNum(i);
     }
-    addInnerHTML(id, `${ADDITION_RESULT_MESSAGE}${sum}`);
+    addInnerHTML(id, `Result of addition: ${sum}`);
 }
 
 // Task 3 _ _ _ _ _ _ _ _ _ _ _
@@ -91,7 +38,7 @@ function addition(id, additionCondition) {
  */
 function printTriangle(id) {
     let triangle = document.createElement('p');
-    for (let i = 0; i < STARS_IN_TRIANGLE ; i++) {
+    for (let i = 0; i < 50 ; i++) {
         let lineOfStars = '';
         for (let j = 0; j <= i ; j++) {
             lineOfStars += '*';
@@ -112,7 +59,7 @@ function printTriangle(id) {
 function convertSeconds(id, secondsString) {
     const totalSeconds = Number(secondsString.replace(',', '.'));
     (!isNaN(totalSeconds) && totalSeconds >= 0) ?
-        addInnerHTML(id, `${OUTPUT_FORMAT_MESSAGE}${convertTimeFormat(totalSeconds)}`) :
+        addInnerHTML(id, `Output format: ${convertTimeFormat(totalSeconds)}`) :
         addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
 
@@ -122,11 +69,12 @@ function convertSeconds(id, secondsString) {
  * @returns {string} looks like this '00:12:01'
  */
 function convertTimeFormat(totalSeconds) {
-    const hours = Math.floor(totalSeconds / SECONDS_IN_HOUR);
-    totalSeconds -= hours * SECONDS_IN_HOUR;
-    const minutes = Math.floor(totalSeconds / SECONDS_IN_MINUTE);
-    const seconds = Math.floor(totalSeconds - (minutes * SECONDS_IN_MINUTE));
-    return TIME_PART(hours) + ':' + TIME_PART(minutes) + ':' + TIME_PART(seconds);
+    const secondsInHour = 3600, secondsInMinute = 60;
+    const hours = Math.floor(totalSeconds / secondsInHour);
+    totalSeconds -= hours * secondsInHour;
+    const minutes = Math.floor(totalSeconds / secondsInMinute);
+    const seconds = Math.floor(totalSeconds - (minutes * secondsInMinute));
+    return timePart(hours) + ':' + timePart(minutes) + ':' + timePart(seconds);
 }
 
 // Task 5 _ _ _ _ _ _ _ _ _ _ _
@@ -138,8 +86,8 @@ function convertTimeFormat(totalSeconds) {
  */
 function age(id, years) {
     let age = Math.floor(Number(years.replace(',', '.')));
-    (!isNaN(age) && age >= 0) ?                                                // 'год', 'года', 'лет'
-        addInnerHTML(id, `${STUDENT_AGE_MESSAGE}${age} ${dateElementTail(age, DATE_ELEMENTS_NAMES[0])}`) :
+    (!isNaN(age) && age >= 0) ?                                         // 'год', 'года', 'лет'
+        addInnerHTML(id, `Возраст студента: ${age} ${dateElementTail(age, DATE_ELEMENTS_NAMES[0])}`) :
         addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
 
@@ -152,15 +100,17 @@ function age(id, years) {
  * @param secondDate added by the user or generated randomly
  */
 function timeInterval(id, firstDate, secondDate) {
-    if(isMatch(firstDate, MATCH_INPUT_DATE) && isMatch(secondDate, MATCH_INPUT_DATE)){
-        const startDate = checkDate(firstDate.split(DATE_ELEMENTS_SEPARATOR));
-        const finishDate = checkDate(secondDate.split(DATE_ELEMENTS_SEPARATOR));
+    const matchInputDate =
+        /^[jfmasondJFMASOND][a-zA-Z]{2,8}\s[0-9]{1,2},\s[0-9]*\s[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}$/g;
+    if(isMatch(firstDate, matchInputDate) && isMatch(secondDate, matchInputDate)){
+        const startDate = checkDate(firstDate.split(/[\s,:]+/));
+        const finishDate = checkDate(secondDate.split(/[\s,:]+/));
         if(startDate !== null && finishDate !== null){
             calculatingDateDifference(id, startDate, finishDate);
             return;
         }
     }
-    addInnerHTML(id, WRONG_DATE_MESSAGE);
+    addInnerHTML(id, 'You entered dates with errors! Please check the input and try again.');
 }
 
 /**
@@ -201,9 +151,11 @@ function checkRanges(ranges, dateArray) {
  * @returns {number[]} an array with ranges
  */
 function dateElementRanges(month, year) {
-    let dateElementRanges = [MONTHS_IN_YEAR, DAYS_OF_MONTHS[month - 1],
-        HOURS_IN_DAY, MINUTES_IN_HOUR, SECONDS_IN_MINUTE];
-    if (month === FEBRUARY && year % LEAP_YEAR === 0) { // if february and leap year
+    const secInMinAndMinInHour = 60, hoursInDay = 24, february = 2, leapYear = 4,
+    daysOfEachMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let dateElementRanges = [MONTHS_IN_YEAR, daysOfEachMonths[month - 1],
+        hoursInDay, secInMinAndMinInHour, secInMinAndMinInHour];
+    if (month === february && year % leapYear === 0) { // if february and leap year
         dateElementRanges[1]++;
     }
     return dateElementRanges;
@@ -233,7 +185,7 @@ function calculatingDateDifference(id, startDate, finishDate) {
     for (let i = 0; i < difference.length; i++) {
         resultString += ` ${difference[i]} ${dateElementTail(difference[i], DATE_ELEMENTS_NAMES[i])}`;
     }
-    addInnerHTML(id, `${TIME_DIFFERENCE_MESSAGE}${resultString}`);
+    addInnerHTML(id, `Между датами прошло${resultString}`);
 }
 
 /**
@@ -246,11 +198,12 @@ function calculatingDateDifference(id, startDate, finishDate) {
  * @returns {boolean} earlier or not
  */
 function firstDateIsEarlier(firstDate, secondDate) {
-    for (let i = 0; i < DATE_ARRAY_INDEXES.length; i++) {
-        if(firstDate[DATE_ARRAY_INDEXES[i]] > secondDate[DATE_ARRAY_INDEXES[i]]){
+    const dateArrayIndexes = [2, 0, 1, 3, 4, 5]; // from years to seconds
+    for (let i = 0; i < dateArrayIndexes.length; i++) {
+        if(firstDate[dateArrayIndexes[i]] > secondDate[dateArrayIndexes[i]]){
             return true;
         }
-        if (firstDate[DATE_ARRAY_INDEXES[i]] < secondDate[DATE_ARRAY_INDEXES[i]]) {
+        if (firstDate[dateArrayIndexes[i]] < secondDate[dateArrayIndexes[i]]) {
             return false;
         } // if the elements are the same, looping more
     }
@@ -316,7 +269,7 @@ function createDate() {
     const min = Math.floor((Math.random() * MINUTES_AND_SECONDS_RANGE) + 1);
     const sec = Math.floor((Math.random() * MINUTES_AND_SECONDS_RANGE) + 1);
     return `${month.charAt(0).toUpperCase() + month.slice(1)} ${
-        day}, ${year} ${TIME_PART(hours)}:${TIME_PART(min)}:${TIME_PART(sec)}`;
+        day}, ${year} ${timePart(hours)}:${timePart(min)}:${timePart(sec)}`;
 }
 
 // Task 7 _ _ _ _ _ _ _ _ _ _ _
@@ -330,7 +283,7 @@ function createDate() {
  */
 function zodiacSigns(idSign, idSingName, date) {
     let signPicture;
-    if(isMatch(date, MATCH_DOB)){
+    if(isMatch(date, /^\d{4}-\d{1,2}-\d{1,2}$/g)){
         const dateArray = date.toString().split('-').map(Number);
         if(dateArray[1] > 0 && dateArray[1] <= MONTHS_IN_YEAR && // check month
             checkRanges(dateElementRanges(dateArray[1], dateArray[0]), [dateArray[1], dateArray[2], dateArray[0], 0, 0, 0])) {
@@ -372,10 +325,14 @@ function adjustImageAndName(idPicture, picturePath, idName, name) {
  */
 function createZodiacSignsArray() {
     let zodiacSigns = [];
-    for (let i = 0; i < ZODIAC_SIGNS_RANGE.length; i++) {
-        zodiacSigns.push(new ZodiacSign(new Date(`${RANDOM_YEAR}-${ZODIAC_SIGNS_RANGE[i][0]}-${ZODIAC_SIGNS_RANGE[i][1]}`),
-            new Date(`${RANDOM_YEAR}-${ZODIAC_SIGNS_RANGE[i][2]}-${ZODIAC_SIGNS_RANGE[i][3]}`),
-            (IMAGES_PATH + ZODIAC_SIGNS_RANGE[i][4].toLowerCase()) + IMAGES_FILE_FORMAT, ZODIAC_SIGNS_RANGE[i][4]));
+    const zodiacSignsRange = [[3, 21, 4, 20, 'Aries'],[4, 21, 5, 21, 'Taurus'], [5, 22, 6, 21, 'Gemini'],
+        [6, 22, 7, 23, 'Cancer'], [7, 24, 8, 23, 'Leo'], [8, 24, 9, 23, 'Virgo'], [9, 24, 10, 23, 'Libra'],
+        [10, 24, 11, 22, 'Scorpio'], [11, 23, 12, 21, 'Sagittarius'], [12, 22, 1, 20, 'Capricorn'],
+        [1, 21, 2, 19, 'Aquarius'], [2, 20, 3, 20, 'Pisces']];
+    for (let i = 0; i < zodiacSignsRange.length; i++) {
+        zodiacSigns.push(new ZodiacSign(new Date(`${RANDOM_YEAR}-${zodiacSignsRange[i][0]}-${zodiacSignsRange[i][1]}`),
+            new Date(`${RANDOM_YEAR}-${zodiacSignsRange[i][2]}-${zodiacSignsRange[i][3]}`),
+            ('pictures/' + zodiacSignsRange[i][4].toLowerCase()) + '.jpg', zodiacSignsRange[i][4]));
     }
     return zodiacSigns;
 }
@@ -389,9 +346,10 @@ function createZodiacSignsArray() {
  * @param dimensions how many rows and columns the chess board has
  */
 function chessBoard(id, idMessage, dimensions) {
-    if(isMatch(dimensions, MATCH_INPUT_DIMENSION)){
+    const cellSizePx = 30;
+    if(isMatch(dimensions, /^\d+[xX]\d+$/g)){
         const chessDimensions = dimensions.toString().toLowerCase().split('x');
-        createChessBoard(id, chessDimensions[0], chessDimensions[1], CHESS_BOARD_CELL_SIZE_IN_PX);
+        createChessBoard(id, chessDimensions[0], chessDimensions[1], cellSizePx);
         addInnerHTML(idMessage, '');
     } else {
         addInnerHTML(idMessage, INVALID_INPUT_MESSAGE);
@@ -427,11 +385,11 @@ function addCells(id, wrapper, rows, columns, sizeOfCell) {
     for (let i = 0; i < rows; i++) {
         if(i % 2 === 0){
             for (let j = 0; j < columns; j++) {
-                wrapper.appendChild(addCell(sizeOfCell, (j % 2 === 0) ? FIRST_CELL_COLOR : SECOND_CELL_COLOR));
+                wrapper.appendChild(addCell(sizeOfCell, (j % 2 === 0) ? '#000000' : '#ffffff'));
             }
         } else {
             for (let j = 0; j < columns; j++) {
-                wrapper.appendChild(addCell(sizeOfCell, (j % 2 !== 0) ? FIRST_CELL_COLOR : SECOND_CELL_COLOR));
+                wrapper.appendChild(addCell(sizeOfCell, (j % 2 !== 0) ? '#000000' : '#ffffff'));
             }
         }
     }
@@ -477,13 +435,14 @@ function removeChessBoard(id) {
  */
 function apartmentMath(entrances, apartOnFloor, floors, apartNumber, id) {
     let input = [entrances, apartOnFloor, floors, apartNumber].map(Math.floor).filter((n) => n > 0);
-    if(input.length === AMOUNT_OF_VALID_ARGUMENTS) { // if all input fields is correct
+    const amountOfValidArguments = 4;
+    if(input.length === amountOfValidArguments) { // if all input fields is correct
         if((input[0] * input[1] * input[2]) < input[3]){ // check if number of the apartment isn't to large
-            addInnerHTML(id, WRONG_APARTMENT_NUMBER_MESSAGE);
+            addInnerHTML(id, 'Wrong apartment number! The building has no apartment with this number.');
         } else {
             let entrance = Math.ceil(input[3] / (input[2] * input[1]));
             let floor = Math.ceil((input[3] - (input[2] * input[1]) * (entrance - 1)) / input[1]);
-            addInnerHTML(id, `${ENTRANCE_AND_FLOOR_NUM_MASSAGE}${entrance} entrance ${floor} floor`);
+            addInnerHTML(id, `Entrance and floor numbers ${entrance} entrance ${floor} floor`);
         }
     } else {
         addInnerHTML(id, INVALID_INPUT_MESSAGE);
@@ -498,7 +457,7 @@ function apartmentMath(entrances, apartOnFloor, floors, apartNumber, id) {
  * @param id of the tag that will show the result
  */
 function sumOfDigits(input, id) {
-    (isMatch(input, DIGIT)) ? addInnerHTML(id, `${DIGITS_SUM_MESSAGE}${input.replace(NOT_DIGIT, '').split('').map(Number)
+    (isMatch(input, /\d/g)) ? addInnerHTML(id, `The sum of digits: ${input.replace(/\D/g, '').split('').map(Number)
         .reduce((accumulator, currentValue) => accumulator + currentValue)}`) : addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
 
@@ -512,7 +471,7 @@ function sumOfDigits(input, id) {
  * @param id of the tag that will show the result
  */
 function linksAlphabet(links, id) {
-    let linksArray = links.replace(TWO_AND_MORE_COMMAS, ',').replace(WHITE_SPACE, '').replace(HTTP_S, '')
+    let linksArray = links.replace(/,{2,}/, ',').replace(/\s/g, '').replace(/http[s]?:[/]+/g, '')
         .split(',').filter((i) => i !== '').sort();
     let linksList = document.createElement('div');
     for (let i = 0; i < linksArray.length; i++) {
@@ -587,6 +546,15 @@ function dateElementTail(element, dateElements) {
  */
 function clearTextArea(id) {
     document.getElementById(id).value = '';
+}
+
+/**
+ * Adding zero if time element less than 10
+ * @param input time element
+ * @returns {string} two digit string
+ */
+function timePart(input) {
+    return input <= 9 ? `0${input}` : input; // add zero if we have one digit
 }
 
 /**
