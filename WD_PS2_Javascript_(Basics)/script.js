@@ -10,7 +10,9 @@ const DATE_ELEMENTS_NAMES = [['год', 'года', 'лет'], ['месяц', '�
 const MONTHS_IN_YEAR = 12;
 const HOURS_RANGE = 23;
 const MINUTES_AND_SECONDS_RANGE = 59;
-const RANDOM_YEAR = 2050;
+const RANDOM_YEAR = 1000;
+// Regular exp
+const POSITIVE_INTEGER = /^[1-9]([0-9]*)$/;
 
 // Tasks 1 & 2 _ _ _ _ _ _ _ _ _ _ _
 
@@ -37,16 +39,12 @@ function addition(id, condition = false) {
  * @param id of the tag that will show the triangle
  */
 function printTriangle(id) {
-    let triangle = document.createElement('p');
-    for (let i = 0; i < 50 ; i++) {
-        let lineOfStars = '';
-        for (let j = 0; j <= i ; j++) {
-            lineOfStars += '*';
-        }
-        triangle.appendChild(document.createTextNode(lineOfStars));
-        triangle.appendChild(document.createElement('br'));
+    let stars = '';
+    for (let i = 0; i <= 50 ; i++) {
+        stars = stars.padEnd(stars.length + i, '*');
+        stars = stars.padEnd(stars.length + 1, '\n');
     }
-    appendChildById(id, triangle);
+    document.getElementById(id).innerText = stars;
 }
 
 // Task 4 _ _ _ _ _ _ _ _ _ _ _
@@ -57,9 +55,8 @@ function printTriangle(id) {
  * @param secondsString given from the user
  */
 function convertSeconds(id, secondsString) {
-    const totalSeconds = Number(secondsString.replace(',', '.'));
-    (!isNaN(totalSeconds) && totalSeconds >= 0) ?
-        addInnerHTML(id, `Output format: ${convertTimeFormat(totalSeconds)}`) :
+    (POSITIVE_INTEGER.test(secondsString)) ?
+        addInnerHTML(id, `Output format: ${convertTimeFormat(secondsString)}`) :
         addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
 
@@ -85,9 +82,8 @@ function convertTimeFormat(totalSeconds) {
  * @param years (age) of the student
  */
 function age(id, years) {
-    let age = Math.floor(Number(years.replace(',', '.')));
-    (!isNaN(age) && age >= 0) ?                                         // 'год', 'года', 'лет'
-        addInnerHTML(id, `Возраст студента: ${age} ${dateElementTail(age, DATE_ELEMENTS_NAMES[0])}`) :
+    (POSITIVE_INTEGER.test(years)) ?                                         // 'год', 'года', 'лет'
+        addInnerHTML(id, `Возраст студента: ${years} ${dateElementTail(years, DATE_ELEMENTS_NAMES[0])}`) :
         addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
 
@@ -96,79 +92,24 @@ function age(id, years) {
 /**
  * Find the difference between two dates
  * @param id of the tag that will show the result
- * @param firstDate added by the user or generated randomly
- * @param secondDate added by the user or generated randomly
+ * @param firstDateInput added by the user or generated randomly
+ * @param secondDateInput added by the user or generated randomly
  */
-function timeInterval(id, firstDate, secondDate) {
-    const matchInputDate =
-        /^[jfmasondJFMASOND][a-zA-Z]{2,8}\s[0-9]{1,2},\s[0-9]*\s[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}$/g;
-    if(isMatch(firstDate, matchInputDate) && isMatch(secondDate, matchInputDate)){
-        const startDate = checkDate(firstDate.split(/[\s,:]+/));
-        const finishDate = checkDate(secondDate.split(/[\s,:]+/));
-        if(startDate !== null && finishDate !== null){
-            calculatingDateDifference(id, startDate, finishDate);
-            return;
+function timeInterval(id, firstDateInput, secondDateInput) {
+    const matchDate = /^[\w]{3,9}\s[\d]{1,2},\s[\d]{4}\s[\d]{2}:[\d]{2}:[\d]{2}$/;
+    if(matchDate.test(firstDateInput) && matchDate.test(secondDateInput)){ // check input format
+        let dateOne = (!isNaN(Date.parse(firstDateInput))) ? new Date(firstDateInput) : false;
+        let dateTwo = (!isNaN(Date.parse(secondDateInput))) ? new Date(secondDateInput) : false;
+        if(dateOne && dateTwo) { // check if date objects are not 'Invalid Date'
+            changeDateObject(); // add one function and one property to the Date object
+            let dates = checkDates([dateOne, dateTwo], [firstDateInput, secondDateInput], /[\s,:]+/);
+            if(dates[0].validDate() && dates[1].validDate()){ // if input and date objects have the same dates
+                dates.map(a => a.dateArray[0]++); // turns months indexes to numbers of months in order
+                return calculatingDateDifference(id, dates[0].dateArray, dates[1].dateArray);
+            }
         }
     }
     addInnerHTML(id, 'You entered dates with errors! Please check the input and try again.');
-}
-
-/**
- * Checking all elements of the date array by comparing
- * to the ranges of each element of the date
- * @param dateArray an array with all date elements separately
- * @returns {*} null if date isn`t valid and the array (only numbers) with date if valid
- */
-function checkDate(dateArray) {
-    if(checkMonth(dateArray[0].toLowerCase())){
-        dateArray[0] = MONTHS.indexOf(dateArray[0].toLowerCase()) + 1;
-        const numericDateArray = dateArray.map(Number); // an array with numeric date representation
-        const elementRanges = dateElementRanges(numericDateArray[0], numericDateArray[2]); // ranges without a year and month
-        return (checkRanges(elementRanges, numericDateArray) && numericDateArray[1] > 0) ? numericDateArray : null;
-    }                                                 // check the day, it must be bigger then 0
-    return null;
-}
-
-/**
- * Check if date has invalid elements
- * @param ranges of each element of the date (in this function we need only day)
- * @param dateArray date array
- * @returns {boolean} true if the date is valid and false if it's not
- */
-function checkRanges(ranges, dateArray) {
-    if(isNaN(dateArray[2]) || dateArray[2] < 0) return false; // year
-    if(isNaN(dateArray[1]) || dateArray[1] < 0 || dateArray[1] > ranges[1]) return false; // day
-    if(isNaN(dateArray[3]) || dateArray[3] < 0 || dateArray[3] > HOURS_RANGE) return false; // hour
-    if(isNaN(dateArray[4]) || dateArray[4] < 0 || dateArray[4] > MINUTES_AND_SECONDS_RANGE) return false; // min
-    if(isNaN(dateArray[5]) || dateArray[5] < 0 || dateArray[5] > MINUTES_AND_SECONDS_RANGE) return false; // sec
-    return true;
-}
-
-/**
- * Create an array with ranges of each element of the date
- * @param month to check if it's february
- * @param year to check if it's leap year
- * @returns {number[]} an array with ranges
- */
-function dateElementRanges(month, year) {
-    const secInMinAndMinInHour = 60, hoursInDay = 24, february = 2, leapYear = 4,
-    daysOfEachMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    let dateElementRanges = [MONTHS_IN_YEAR, daysOfEachMonths[month - 1],
-        hoursInDay, secInMinAndMinInHour, secInMinAndMinInHour];
-    if (month === february && year % leapYear === 0) { // if february and leap year
-        dateElementRanges[1]++;
-    }
-    return dateElementRanges;
-}
-
-/**
- * Loop an array with 12 months to find a match
- * @param inputMonth that we want to check
- * @returns {boolean} true if month is valid
- */
-function checkMonth(inputMonth) {
-    let trueMonth = MONTHS.filter(month => month === inputMonth);
-    return trueMonth.length > 0;
 }
 
 /**
@@ -246,32 +187,6 @@ function rearrangeElements(dateArray, dateElementRanges) {
     return dateArray;
 }
 
-/**
- * Create and add to text fields random dates for testing
- * @param firstDateId id of the first date text field
- * @param secondDateId id of the second date text field
- */
-function randomDate(firstDateId, secondDateId) {
-    document.getElementById(firstDateId).value = createDate();
-    document.getElementById(secondDateId).value = createDate();
-}
-
-/**
- * Create string with random date
- * @returns {string} like: "October 13, 2014 11:13:00"
- */
-function createDate() {
-    const month = MONTHS[Math.floor((Math.random() * (MONTHS_IN_YEAR )))];
-    const year = Math.floor((Math.random() * RANDOM_YEAR) + 1);
-    const elementRanges = dateElementRanges(MONTHS.indexOf(month) + 1, year);
-    const day = Math.floor((Math.random() * elementRanges[1]) + 1);
-    const hours = Math.floor((Math.random() * HOURS_RANGE) + 1);
-    const min = Math.floor((Math.random() * MINUTES_AND_SECONDS_RANGE) + 1);
-    const sec = Math.floor((Math.random() * MINUTES_AND_SECONDS_RANGE) + 1);
-    return `${month.charAt(0).toUpperCase() + month.slice(1)} ${
-        day}, ${year} ${timePart(hours)}:${timePart(min)}:${timePart(sec)}`;
-}
-
 // Task 7 _ _ _ _ _ _ _ _ _ _ _
 
 /**
@@ -279,27 +194,59 @@ function createDate() {
  * and receives a zodiac sign of that day (with a picture).
  * @param idSign id of the zodiac sign image
  * @param idSingName name of the zodiac sign
- * @param date of birth given form the user
+ * @param dateInput of birth given form the user
  */
-function zodiacSigns(idSign, idSingName, date) {
-    let signPicture;
-    if(isMatch(date, /^\d{4}-\d{1,2}-\d{1,2}$/g)){
-        const dateArray = date.toString().split('-').map(Number);
-        if(dateArray[1] > 0 && dateArray[1] <= MONTHS_IN_YEAR && // check month
-            checkRanges(dateElementRanges(dateArray[1], dateArray[0]), [dateArray[1], dateArray[2], dateArray[0], 0, 0, 0])) {
-                const dateOfBirth = new Date(date);
-                const zodiacSigns = createZodiacSignsArray();
-                for (let index in zodiacSigns) {
-                    if (zodiacSigns[index].findZodiacSign(dateOfBirth.getMonth(), dateOfBirth.getDate())) {
-                        signPicture = adjustImageAndName(
-                            idSign, `${zodiacSigns[index].picture}`, idSingName, zodiacSigns[index].signName);
-                    }
-                }
+function zodiacSigns(idSign, idSingName, dateInput) {
+    let validSign = false;
+    if(/^\d{4}-\d{1,2}-\d{1,2}$/g.test(dateInput)){ // check input format
+        let date = (!isNaN(Date.parse(dateInput))) ? new Date(dateInput) : false;
+        if(date) { // check if date object is not 'Invalid Date'
+            changeDateObject();
+            date = checkDates([date], [rearrangeDateInput(dateInput, '-')], '-');
+            if(date[0].validDate()){
+                validSign = findAndPrintZodiacSing(date[0], idSign, idSingName);
+            }
         }
     }
-    if(typeof signPicture === 'undefined'){
+    if(!validSign){
         addInnerHTML(idSingName, INVALID_INPUT_MESSAGE);
         document.getElementById(idSign).setAttribute('src', '');
+    }
+}
+
+/***
+ * Create suitable string date for checkDates() function
+ * @param dateInput input from the user
+ * @param splitter split the input date
+ * @returns {string} suitable for checkDates() function string
+ */
+function rearrangeDateInput(dateInput, splitter) {
+    let result = dateInput.split(splitter);
+    [result[0], result[1], result[2]] = [result[1], result[2], result[0]];
+    result[0]--; // '--' month to an index
+    return `${result[0]}-${result[1]}-${result[2]}`;
+}
+
+/**
+ * Determine particular zodiac sign and print the name of
+ * the sing and the picture of the sign
+ * @param date object
+ * @param idSign id of the picture of the zodiac sign
+ * @param idSingName id of the zodiac sign name
+ * @returns {boolean} only true
+ */
+function findAndPrintZodiacSing(date, idSign, idSingName) {
+    const sings =  [[21, 'Aquarius'], [20, 'Pisces'], [21, 'Aries'],[21, 'Taurus'],
+        [22, 'Gemini'], [22, 'Cancer'], [24, 'Leo'], [24, 'Virgo'], [24, 'Libra'],
+        [24, 'Scorpio'], [23, 'Sagittarius'], [22, 'Capricorn']];
+    const index = (i, array) => (i !== 0) ? i - 1 : array.length - 1; // prevents wrong index of an array
+    for (let i = 0; i < sings.length; i++) {
+        if(date.getMonth() === i) {
+            const picture = (date.getDate() >= sings[i][0]) ? sings[i][1] : // if date is bigger or equal
+                sings[index(i, sings)][1]; // if not, take previous sign
+            adjustImageAndName(idSign, `pictures/${picture.toLowerCase()}.jpg`, idSingName, picture);
+            return true;
+        }
     }
 }
 
@@ -309,32 +256,11 @@ function zodiacSigns(idSign, idSingName, date) {
  * @param picturePath path name to the zodiac sign image
  * @param idName id of the zodiac sign name
  * @param name of the zodiac sign
- * @returns {HTMLElement} zodiac sign image
  */
 function adjustImageAndName(idPicture, picturePath, idName, name) {
     let image = document.getElementById(idPicture);
     image.setAttribute('src', picturePath);
     addInnerHTML(idName, name);
-    return image;
-}
-
-/**
- * Create an array of ZodiacSign objects with different
- * zodiac signs and return the array
- * @returns {Array} of ZodiacSign objects
- */
-function createZodiacSignsArray() {
-    let zodiacSigns = [];
-    const zodiacSignsRange = [[3, 21, 4, 20, 'Aries'],[4, 21, 5, 21, 'Taurus'], [5, 22, 6, 21, 'Gemini'],
-        [6, 22, 7, 23, 'Cancer'], [7, 24, 8, 23, 'Leo'], [8, 24, 9, 23, 'Virgo'], [9, 24, 10, 23, 'Libra'],
-        [10, 24, 11, 22, 'Scorpio'], [11, 23, 12, 21, 'Sagittarius'], [12, 22, 1, 20, 'Capricorn'],
-        [1, 21, 2, 19, 'Aquarius'], [2, 20, 3, 20, 'Pisces']];
-    for (let i = 0; i < zodiacSignsRange.length; i++) {
-        zodiacSigns.push(new ZodiacSign(new Date(`${RANDOM_YEAR}-${zodiacSignsRange[i][0]}-${zodiacSignsRange[i][1]}`),
-            new Date(`${RANDOM_YEAR}-${zodiacSignsRange[i][2]}-${zodiacSignsRange[i][3]}`),
-            ('pictures/' + zodiacSignsRange[i][4].toLowerCase()) + '.jpg', zodiacSignsRange[i][4]));
-    }
-    return zodiacSigns;
 }
 
 // Task 8 _ _ _ _ _ _ _ _ _ _ _
@@ -343,14 +269,19 @@ function createZodiacSignsArray() {
  * The user enters the dimensions of the board (in the format '8x8'). Print the chessboard.
  * @param id of the chess board div tag
  * @param idMessage of the error message p tag
- * @param dimensions how many rows and columns the chess board has
+ * @param chessDimensions how many rows and columns the chess board has
  */
-function chessBoard(id, idMessage, dimensions) {
-    const cellSizePx = 30;
-    if(isMatch(dimensions, /^\d+[xX]\d+$/g)){
-        const chessDimensions = dimensions.toString().toLowerCase().split('x');
-        createChessBoard(id, chessDimensions[0], chessDimensions[1], cellSizePx);
-        addInnerHTML(idMessage, '');
+function chessBoard(id, idMessage, chessDimensions) {
+    const maxSize = 30, cellSizePx = 40;
+    if(/^[1-9][0-9]*[xX][1-9][0-9]*$/g.test(chessDimensions)){
+        const dimensions = chessDimensions.toString().toLowerCase().split('x');
+        if(dimensions[0] > maxSize || dimensions[1] > maxSize){
+            addInnerHTML(idMessage,
+                'The dimensions of the chessboard are to large! Max size is ' + maxSize + '.');
+        } else {
+            createChessBoard(id, dimensions[0], dimensions[1], cellSizePx);
+            addInnerHTML(idMessage, '');
+        }
     } else {
         addInnerHTML(idMessage, INVALID_INPUT_MESSAGE);
     }
@@ -383,14 +314,8 @@ function createChessBoard(id, rows, columns, sizeOfCell) {
  */
 function addCells(id, wrapper, rows, columns, sizeOfCell) {
     for (let i = 0; i < rows; i++) {
-        if(i % 2 === 0){
-            for (let j = 0; j < columns; j++) {
-                wrapper.appendChild(addCell(sizeOfCell, (j % 2 === 0) ? '#000000' : '#ffffff'));
-            }
-        } else {
-            for (let j = 0; j < columns; j++) {
-                wrapper.appendChild(addCell(sizeOfCell, (j % 2 !== 0) ? '#000000' : '#ffffff'));
-            }
+        for (let j = 0; j < columns; j++) {
+            wrapper.appendChild(addCell(sizeOfCell, (j % 2) === (i % 2) ? '#000000' : '#ffffff'));
         }
     }
     document.getElementById(id).innerHTML = wrapper.innerHTML;
@@ -457,7 +382,7 @@ function apartmentMath(entrances, apartOnFloor, floors, apartNumber, id) {
  * @param id of the tag that will show the result
  */
 function sumOfDigits(input, id) {
-    (isMatch(input, /\d/g)) ? addInnerHTML(id, `The sum of digits: ${input.replace(/\D/g, '').split('').map(Number)
+    (/\d/.test(input)) ? addInnerHTML(id, `The sum of digits: ${input.replace(/\D/g, '').split('').map(Number)
         .reduce((accumulator, currentValue) => accumulator + currentValue)}`) : addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
 
@@ -476,7 +401,8 @@ function linksAlphabet(links, id) {
     let linksList = document.createElement('div');
     for (let i = 0; i < linksArray.length; i++) {
         let link = document.createElement('a');
-        link.setAttribute('href', `//${linksArray[i]}`);
+        link.style.color = 'white';
+        link.setAttribute('href', `http://${linksArray[i]}`);
         link.textContent = linksArray[i];
         linksList.appendChild(link);
         linksList.appendChild(document.createElement('br'));
@@ -496,17 +422,6 @@ function clearLinks(idTextArea, idLinksList) {
 
 // General functions  _ _ _ _ _ _ _ _ _ _ _
 
-/**
- * Check if string is match the given pattern
- * @param input string
- * @param pattern regex for expm
- * @returns {boolean} match or not
- */
-function isMatch(input, pattern) {
-    const result = input.match(pattern);
-    return result !== null;
-}
-
 /*
 Adding text to a HTML element by it`s id
  */
@@ -522,22 +437,16 @@ function appendChildById(id, child){
 }
 
 /*
-The function returns the word that corresponds with
-the numeric element of the date transmitted from the user.
-(example: 2 года, 1 месяц, 3 дня, 5 часов, 10 минут, 15 секунд)
+ * The function returns the word that corresponds with
+ * the numeric element of the date transmitted from the user.
+ * (example: 2 года, 1 месяц, 3 дня, 5 часов, 10 минут, 15 секунд)
+ * @param element of the date
+ * @param dateTails an array like ['год', 'года', 'лет']
+ * @returns {*} tail (word) for date or time element
  */
-function dateElementTail(element, dateElements) {
-    const lastTwoIntegers = Number(element.toString().slice(-2));
-    if(lastTwoIntegers >= 10 && lastTwoIntegers <= 20){
-        return dateElements[2]; // лет, месяцев ...
-    }
-    const lastInteger = Number(element.toString().slice(-1));
-    if(lastInteger === 1){
-        return dateElements[0]; // год, месяц ...
-    } else if(lastInteger >= 2 && lastInteger <= 4){
-        return dateElements[1]; // года, месяца ...
-    }
-    return dateElements[2]; // лет, месяцев ...
+function dateElementTail(element, dateTails) {
+    return (element % 100 >= 10 && element % 100 <= 20) ? dateTails[2] : (element % 10 === 1) ?
+        dateTails[0] : (element % 10 >= 2 && element % 10 <= 4) ? dateTails[1] : dateTails[2];
 }
 
 /**
@@ -558,30 +467,90 @@ function timePart(input) {
 }
 
 /**
- * Class created to help us to find zodiac sing
+ * Add one function and one property to Date object
  */
-class ZodiacSign {
-    constructor(firstDate, secondDate, picture, signName) {
-        this._firstDate = new Date(firstDate);
-        this._secondDate = new Date(secondDate);
-        this._signName = signName;
-        this._picture = picture;
-    }
-
-    get picture() {
-        return this._picture;
-    }
-
-    get signName() {
-        return this._signName;
-    }
-
-    findZodiacSign(month, day) {
-        if(this._firstDate.getMonth() === month && day >= this._firstDate.getDate()){
-            return true;
-        } else if(this._secondDate.getMonth() === month && day <= this._secondDate.getDate()) {
+function changeDateObject() {
+    Date.prototype.dateArray = [];
+    Date.prototype.validDate = function () {
+        const functions = [this.getMonth(), this.getDate(), this.getFullYear(), this.getHours(),
+            this.getMinutes(), this.getSeconds()];
+        if(this.dateArray.length > 0) {
+            for (let i = 0; i < this.dateArray.length; i++) {
+                if(functions[i] !== this.dateArray[i]) {
+                    return false;
+                }
+            }
             return true;
         }
         return false;
+    };
+}
+
+/**
+ * Change dateArray property by splitting user`s input and
+ * create from it an array
+ * @param dates Date objects
+ * @param datesInput input form the user
+ * @param splitter unit that helps us to split user`s input
+ * @returns {*} Date object with new dateArray property
+ */
+function checkDates(dates, datesInput, splitter) {
+    for (let i = 0; i < dates.length; i++) {
+        const dateArray = datesInput[i].split(splitter);
+        if(isNaN(dateArray[0])){ // if month is a word and not a number
+            dateArray[0] = MONTHS.indexOf(dateArray[0].toLowerCase()); // turns month word to number
+        }
+        dates[i].dateArray = dateArray.map(Number);
     }
+    return dates;
+}
+
+/**
+ * Create and add to text fields random dates for testing
+ * @param firstDateId id of the first date text field
+ * @param secondDateId id of the second date text field
+ */
+function randomDate(firstDateId, secondDateId = '') {
+    if(secondDateId === ''){
+        document.getElementById(firstDateId).value = createDate(true);
+    } else {
+        document.getElementById(firstDateId).value = createDate();
+        document.getElementById(secondDateId).value = createDate();
+    }
+}
+
+/**
+ * Create string with random date
+ * @returns {string} like: "October 13, 2014 11:13:00" or "2014-12-31"
+ */
+function createDate(zodiac = false) {
+    const month = MONTHS[Math.floor((Math.random() * (MONTHS_IN_YEAR )))];
+    const year = Math.floor((Math.random() * RANDOM_YEAR) + 1500);
+    const elementRanges = dateElementRanges(MONTHS.indexOf(month) + 1, year);
+    const day = Math.floor((Math.random() * elementRanges[1]) + 1);
+    if(zodiac) {
+        return `${year}-${MONTHS.indexOf(month) + 1}-${day}`;
+    }
+    const hours = Math.floor((Math.random() * HOURS_RANGE) + 1);
+    const min = Math.floor((Math.random() * MINUTES_AND_SECONDS_RANGE) + 1);
+    const sec = Math.floor((Math.random() * MINUTES_AND_SECONDS_RANGE) + 1);
+    return `${month.charAt(0).toUpperCase() + month.slice(1)} ${
+        day}, ${year} ${timePart(hours)}:${timePart(min)}:${timePart(sec)}`;
+}
+
+/**
+ * Create an array with ranges of each element of the date
+ * @param month to check if it's february
+ * @param year to check if it's leap year
+ * @returns {number[]} an array with ranges
+ */
+function dateElementRanges(month, year) {
+    const secInMinAndMinInHour = 60, hoursInDay = 24, february = 2, leapYear = 4,
+        daysOfEachMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let dateElementRanges = [MONTHS_IN_YEAR, daysOfEachMonths[month - 1],
+        hoursInDay, secInMinAndMinInHour, secInMinAndMinInHour];
+    if (month === february && year % leapYear === 0) { // if february and leap year
+        dateElementRanges[1]++;
+    }
+    return dateElementRanges;
 }
