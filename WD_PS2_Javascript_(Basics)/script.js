@@ -11,8 +11,6 @@ const MONTHS_IN_YEAR = 12;
 const HOURS_RANGE = 23;
 const MINUTES_AND_SECONDS_RANGE = 59;
 const RANDOM_YEAR = 1000;
-// Regular exp
-const POSITIVE_INTEGER = /^[1-9]([0-9]*)$/;
 
 // Tasks 1 & 2 _ _ _ _ _ _ _ _ _ _ _
 
@@ -41,8 +39,7 @@ function addition(id, condition = false) {
 function printTriangle(id) {
     let stars = '';
     for (let i = 0; i <= 50 ; i++) {
-        stars = stars.padEnd(stars.length + i, '*');
-        stars = stars.padEnd(stars.length + 1, '\n');
+        stars = stars.padEnd(stars.length + i, '*') + '\n';
     }
     document.getElementById(id).innerText = stars;
 }
@@ -52,11 +49,11 @@ function printTriangle(id) {
 /**
  * The user enters the time in seconds. Output in the format: hh: mm: ss  (01:05:20)
  * @param id of the tag that will show the result
- * @param secondsString given from the user
+ * @param seconds given from the user
  */
-function convertSeconds(id, secondsString) {
-    (POSITIVE_INTEGER.test(secondsString)) ?
-        addInnerHTML(id, `Output format: ${convertTimeFormat(secondsString)}`) :
+function convertSeconds(id, seconds) {
+    (/^\d+$/.test(seconds) && !(seconds.length > 1 && seconds[0] === '0')) ?
+        addInnerHTML(id, `Output format: ${convertTimeFormat(seconds)}`) :
         addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
 
@@ -82,7 +79,7 @@ function convertTimeFormat(totalSeconds) {
  * @param years (age) of the student
  */
 function age(id, years) {
-    (POSITIVE_INTEGER.test(years)) ?                                         // 'год', 'года', 'лет'
+    (/^[1-9]([0-9]*)$/.test(years)) ?                                         // 'год', 'года', 'лет'
         addInnerHTML(id, `Возраст студента: ${years} ${dateElementTail(years, DATE_ELEMENTS_NAMES[0])}`) :
         addInnerHTML(id, INVALID_INPUT_MESSAGE);
 }
@@ -236,9 +233,20 @@ function rearrangeDateInput(dateInput, splitter) {
  * @returns {boolean} only true
  */
 function findAndPrintZodiacSing(date, idSign, idSingName) {
-    const sings =  [[21, 'Aquarius'], [20, 'Pisces'], [21, 'Aries'],[21, 'Taurus'],
-        [22, 'Gemini'], [22, 'Cancer'], [24, 'Leo'], [24, 'Virgo'], [24, 'Libra'],
-        [24, 'Scorpio'], [23, 'Sagittarius'], [22, 'Capricorn']];
+    const sings =  [
+        [21, 'Aquarius'],
+        [20, 'Pisces'],
+        [21, 'Aries'],
+        [21, 'Taurus'],
+        [22, 'Gemini'],
+        [22, 'Cancer'],
+        [24, 'Leo'],
+        [24, 'Virgo'],
+        [24, 'Libra'],
+        [24, 'Scorpio'],
+        [23, 'Sagittarius'],
+        [22, 'Capricorn']
+    ];
     const index = (i, array) => (i !== 0) ? i - 1 : array.length - 1; // prevents wrong index of an array
     for (let i = 0; i < sings.length; i++) {
         if(date.getMonth() === i) {
@@ -283,6 +291,7 @@ function chessBoard(id, idMessage, chessDimensions) {
             addInnerHTML(idMessage, '');
         }
     } else {
+        removeChessBoard(id);
         addInnerHTML(idMessage, INVALID_INPUT_MESSAGE);
     }
 }
@@ -403,6 +412,7 @@ function linksAlphabet(links, id) {
         let link = document.createElement('a');
         link.style.color = 'white';
         link.setAttribute('href', `http://${linksArray[i]}`);
+        link.setAttribute('target', '_blank"');
         link.textContent = linksArray[i];
         linksList.appendChild(link);
         linksList.appendChild(document.createElement('br'));
@@ -430,13 +440,6 @@ function addInnerHTML(id, text) {
 }
 
 /*
-Adding child to a HTML element by it`s id
- */
-function appendChildById(id, child){
-    document.getElementById(id).appendChild(child);
-}
-
-/*
  * The function returns the word that corresponds with
  * the numeric element of the date transmitted from the user.
  * (example: 2 года, 1 месяц, 3 дня, 5 часов, 10 минут, 15 секунд)
@@ -445,8 +448,13 @@ function appendChildById(id, child){
  * @returns {*} tail (word) for date or time element
  */
 function dateElementTail(element, dateTails) {
-    return (element % 100 >= 10 && element % 100 <= 20) ? dateTails[2] : (element % 10 === 1) ?
-        dateTails[0] : (element % 10 >= 2 && element % 10 <= 4) ? dateTails[1] : dateTails[2];
+    if (element % 100 >= 10 && element % 100 <= 20) {
+        return dateTails[2];
+    }
+    if (element % 10 === 1) {
+        return dateTails[0];
+    }
+    return (element % 10 >= 2 && element % 10 <= 4) ? dateTails[1] : dateTails[2];
 }
 
 /**
