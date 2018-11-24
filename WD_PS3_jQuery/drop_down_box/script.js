@@ -12,7 +12,7 @@ const FRIENDS = [
 ];
 
 $(document).ready(() => {
-    let $container = $('.container');
+    const $container = $('.container');
     /* create all dropDownBox options (FRIENDS) */
     $container.html(FRIENDS.map((f) => makeBox('box clicker', f)).reduce((a, b) => a + b));
 
