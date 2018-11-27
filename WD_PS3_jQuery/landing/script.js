@@ -1,11 +1,9 @@
-
 const SPEED = 1000, PAGE_TOP = 0, PX_OFFSET = 100;
 
 $(document).ready(() => {
     const $upButton =  $('.up-button');
     const $links = $('#banner, #services, #forms');
     const $webPage = $('html, body');
-    const $animated = $(':animated');
     const stopScroll = () => {
         $webPage.on("DOMMouseScroll mousewheel keyup touchmove scroll wheel",
             () => { $webPage.stop();}
@@ -17,14 +15,14 @@ $(document).ready(() => {
     });
 
     $upButton.click(() => {
-        if (!$animated.length) {
+        if (!$(':animated').length) {
             stopScroll();
             $webPage.animate({scrollTop : PAGE_TOP}, SPEED);
         }
     });
 
     $links.click(() => {
-        if (!$animated.length) {
+        if (!$(':animated').length) {
             stopScroll();
             const $aim = $('.' + `${event.target.id}`);
             const recenter = (window, aim, offset) => (window > aim) ?
