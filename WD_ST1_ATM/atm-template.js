@@ -12,11 +12,11 @@ const ACTIONS = new Map([
 const INFO = new Map([
     ['isAuth', ['To do this action, you need to authorize', 'action of an unauthorized user']],
     ['isLogged', ['You already logged in', 'multiple attempt to log in']],
-    ['isAdmin', ['This action isn\'t allowed for admin', 'attempt get cash by the admin user']],
+    ['isNotAdmin', ['This action isn\'t allowed for admin', 'attempt get cash by the admin user']],
     ['isValidAmount', ['You entered invalid number', 'invalid input']],
     ['isEnoughCashATM', ['ATM doesn\'t have enough money', 'not enough money in the ATM']],
     ['isEnoughCash', ['You don\'t have enough money', 'user doesn\'t have enough money']],
-    ['isUser', ['This action isn\'t allowed for user', 'attempt to load cash to AMT by not an admin user']],
+    ['isNotUser', ['This action isn\'t allowed for user', 'attempt to load cash to AMT by not an admin user']],
     ['isUserInputString', ['Username and password must be Strings', 'not String input']],
     ['isNumberString', ['The number must be passed as a String', 'not String input']],
     ['userInput', ['Your input is invalid', 'invalid input during logging']],
@@ -67,7 +67,7 @@ const ATM = {
             this.current_user.debet -= Number(amount);
             return log('getCash', 'Get your money', this.current_user.debet);
         };
-        this.addReport(checks(['isAuth', 'isAdmin', 'isNumberString', 'isValidAmount',
+        this.addReport(checks(['isAuth', 'isNotAdmin', 'isNumberString', 'isValidAmount',
             'isEnoughCashATM', 'isEnoughCash'], [this, amount]) ?
             gettingCash(amount) : log('getCash', current_error));
     },
@@ -78,7 +78,7 @@ const ATM = {
             this.current_user.debet += Number(amount);
             return log('loadCash', 'replenished balance', this.current_user.debet);
         };
-        this.addReport(checks(['isAuth', 'isAdmin', 'isNumberString', 'isValidAmount'],
+        this.addReport(checks(['isAuth', 'isNotAdmin', 'isNumberString', 'isValidAmount'],
             [this, amount]) ? loadAccount(amount) : log('loadCash', current_error));
     },
     // load cash to ATM - available for admin only - EXTENDED
@@ -87,15 +87,15 @@ const ATM = {
             this.cash += Number(addition);
             return log('load_cash', 'replenished ATM balance', this.cash);
         };
-        this.addReport(checks(['isAuth', 'isUser', 'isNumberString', 'isValidAmount'],
+        this.addReport(checks(['isAuth', 'isNotUser', 'isNumberString', 'isValidAmount'],
             [this, addition]) ? loadToATM(addition) : log('load_cash', current_error));
     },
     // get report about cash actions - available for admin only - EXTENDED
     getReport: function() {
         const reports = () => this.reports.forEach(
             (element, i) => log('', `${++i}) ${element.getReport()}\n`, REPORT_COLOR));
-        this.addReport(checks(['isAuth', 'isUser'], [this]) ? (reports(),
-            log('getReport', 'get report')) :
+        this.addReport(checks(['isAuth', 'isNotUser'], [this]) ? (reports(),
+                log('getReport', 'get report')) :
             log('getReport', current_error));
     },
     // log out
@@ -133,9 +133,9 @@ function isLogged(input) { return !input[2].is_auth; }
 
 function isAuth(input) { return input[0].is_auth; }
 
-function isAdmin(input) { return input[0].current_type !== 'admin'; }
+function isNotAdmin(input) { return input[0].current_type !== 'admin'; }
 
-function isUser(input) { return input[0].current_type === 'admin'; }
+function isNotUser(input) { return input[0].current_type === 'admin'; }
 
 function isEnoughCashATM(input) { return input[1] <= input[0].cash; }
 
