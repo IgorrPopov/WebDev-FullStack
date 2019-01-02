@@ -11,54 +11,57 @@ const FRIENDS = [
     'Aristotle'
 ];
 
-$(document).ready(() => {
-    const $container = $('.container');
-    /* create all dropDownBox options (FRIENDS) */
-    $container.html(FRIENDS.map((f) => makeBox('box clicker', f)).reduce((a, b) => a + b));
+const selectHeaderClass = 'selector__header';
+const selectTitleClass = 'selector__header--title';
+const selectOptionsClass = 'selector__options';
+const selectOptionsElementClass = 'selector__options--element';
+const selectSelectedElementClass = 'selector__options--selected-element';
 
-    $('html').on('click', () => {
-        if (!$(':animated').length) {
-            const classes = event.toElement.classList;
-            const $aim = (classes.contains('image')) ? // if our final target is image
-                event.target.parentNode : event.target; // then we take it`s wrapper
-            dropDownBox(classes, $aim, $container);
+$(document).ready(() => {
+    const $header = $(`.${selectHeaderClass}`);
+    const $title = $(`.${selectTitleClass}`);
+    const $options = $(`.${selectOptionsClass}`);
+
+    $options.html(FRIENDS
+        .map((friend) => createOptionalElement(friend))
+        .join(''));
+
+    $('body').on('click', () => {
+        $options.slideUp();
+    });
+
+    $header.on('click', (event) => {
+        event.stopPropagation();
+
+        if(!$(':animated').length) {
+            $options.slideToggle();
         }
     });
+
+    $options.on('click', (event) => {
+        const $clickedOption = getClickedOption(event.target);
+
+        if(!$clickedOption.hasClass(selectOptionsClass)) {
+            $(`.${selectOptionsElementClass}`)
+                .removeClass(selectSelectedElementClass);
+            $clickedOption.addClass(selectSelectedElementClass);
+
+            $options.slideUp();
+            $title.html($clickedOption.html());
+        }
+
+        event.stopPropagation();
+    });
 });
+// prevents adding empty html to title if user clicked on img tag
+const getClickedOption = (target) =>
+    target.innerHTML ? $(target) : $(target.parentElement);
 
-function dropDownBox(classes, $aim, $container) {
-    if(classes.contains('clicker')){
-        $container.slideToggle(() => {
-            if(classes.contains('box') || classes.contains('image')){
-                sliderMovement($aim, $('.title'));
-            }
-        });
-    } else if($container.css('display') !== 'none'){
-        $container.slideUp();
-    }
-}
+const getImageSource = (friendName) =>
+    `pictures/${friendName.toLowerCase().replace(' ', '_')}.jpg`;
 
-function sliderMovement($aim, $titleBox) {
-    if (!$titleBox[0].classList.contains('delete')) {
-        pullDownTitleBox($titleBox);
-    }
-    replaceTitleBox($aim, $titleBox);
-}
-
-function replaceTitleBox($aim, $titleBox) {
-    $titleBox.replaceWith(makeBox('title clicker', $aim.textContent, ''));
-    $aim.replaceWith('');
-}
-
-function pullDownTitleBox($titleBox) {
-    const index = FRIENDS.indexOf($titleBox[0].innerText);
-    const $child =  $(`.container div:nth-child(${index || 1})`);
-    (index) ? $child.after(makeBox('box clicker', FRIENDS[index])) :
-        $child.before(makeBox('box clicker', FRIENDS[index]));
-}
-
-function makeBox(classes, friend, imgClass = 'image') {
-    const image = (text) => `pictures/${text.toLowerCase().replace(' ', '_')}.jpg`;
-    return `<div class="${classes}"><img src="${image(friend)}"
-              class="clicker ${imgClass}">${friend}</div>`;
-}
+const createOptionalElement = (friend) =>
+    `<div class="${selectOptionsElementClass}">
+      <img src="${getImageSource(friend)}">
+      ${friend}
+    </div>`;
