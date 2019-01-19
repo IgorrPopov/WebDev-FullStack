@@ -1,7 +1,16 @@
 <?php
-    include_once '../app/JsonSongsCounter.php';
+    include_once
+        dirname(__DIR__) .
+        DIRECTORY_SEPARATOR .
+        'app' .
+        DIRECTORY_SEPARATOR .
+        'config' .
+        DIRECTORY_SEPARATOR .
+        'config.php';
 
-    $songsCounter = new JsonSongsCounter('../app/json/dio_top_songs.json');
+    include_once PATH_TO_JSON_COUNTER_CLASS;
+
+    $songsCounter = new JsonSongsCounter(PATH_TO_JSON_FILE);
 ?>
 
 <!DOCTYPE html>

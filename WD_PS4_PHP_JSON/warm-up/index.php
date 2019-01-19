@@ -14,6 +14,13 @@
             unset($_SESSION[$task]);
         }
     }
+
+    function showEnteredText()
+    {
+        if (isset($_SESSION['textarea_input'])) {
+           echo $_SESSION['textarea_input'];
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -61,14 +68,14 @@
     <input type="submit" name="task3" value="Upload">
   </form>
   <div class="task__answer">
-      <?php showAnswer('task3'); ?>
+    <?php showAnswer('task3'); ?>
   </div>
-  <div>
-      <?php
-          if(isset($_SESSION['files_list'])){
-             echo $_SESSION['files_list'];
-          }
-      ?>
+  <div><!-- print list of links -->
+    <?php
+        if(isset($_SESSION['files_list'])){
+           echo $_SESSION['files_list'];
+        }
+    ?>
   </div>
 </section>
 <section class="task">
@@ -91,7 +98,7 @@
     <input type="submit" name="task5" value="GO!">
   </form>
   <div class="task__answer">
-      <?php showAnswer('task5'); ?>
+    <?php showAnswer('task5'); ?>
   </div>
 </section>
 <section class="task">
@@ -115,17 +122,17 @@
   </p>
   <form action="actions.php" method="post">
     <label for="textarea">Enter your text:</label><br>
-    <textarea name="textarea" id="textarea" cols="30" rows="10"></textarea>
+    <textarea name="textarea" id="textarea" cols="30" rows="10"><?php showEnteredText() ?></textarea>
     <input type="submit" name="task7" value="GO!">
   </form>
   <div class="task__answer">
-      <?php showAnswer('task7'); ?>
+    <?php showAnswer('task7'); ?>
   </div>
 </section>
 <script
-    src="https://code.jquery.com/jquery-3.2.1.min.js"
-    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous">
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
 </script>
 <script src="js/script.js"></script>
 </body>

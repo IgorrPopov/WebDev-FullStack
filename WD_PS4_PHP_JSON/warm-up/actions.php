@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-define('UPLOADED_FOLDER', 'uploaded_files/');
+define('UPLOADED_FOLDER', 'uploaded_files' . DIRECTORY_SEPARATOR);
 
 define('IMG_EXT', [
     'bmp',
@@ -43,15 +43,17 @@ define('FUNCTIONS', [
     'task7' => countText()
 ]);
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    if(count($_REQUEST)){
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if(count($_REQUEST)) {
         end($_REQUEST);
         $task = checkInput(key($_REQUEST));
         $_SESSION[$task] = FUNCTIONS[$task];
-
-        $_SESSION['files_list'] = showFilesList();
     }
 }
+
+$_SESSION['files_list'] = showFilesList();
+
+$_SESSION['textarea_input'] = $_POST['textarea'];
 
 function checkInput($input)
 {
@@ -88,10 +90,19 @@ function uploadFile()
 {
     if(isset($_FILES['file'])){
         if($_FILES['file']['error'] === UPLOAD_ERR_OK){
+            ifNeedCreateUploadedFolder(UPLOADED_FOLDER);
+
             $uploadedFile = UPLOADED_FOLDER . basename($_FILES['file']['name']);
             move_uploaded_file($_FILES['file']['tmp_name'], $uploadedFile);
         }
         return UPLOAD_FILE_MSG[$_FILES['file']['error']];
+    }
+}
+
+function ifNeedCreateUploadedFolder($pathToFolder)
+{
+    if(!file_exists($pathToFolder)) {
+        mkdir($pathToFolder, 0700);
     }
 }
 
@@ -184,22 +195,12 @@ function addCell($size, $color)
 function digitsSum()
 {
     $numbers = isset($_POST['number']) ? checkInput($_POST['number']) : '';
-    if(empty($numbers)){
+    if(empty($numbers)) {
         return 'Empty input!';
     }
-    $numbers = str_split($numbers);
-    $result = -1;
-    foreach ($numbers as $number) {
-        if(preg_match('/\d/',$number)) {
-            if($result === -1) {
-                $result++;
-            }
-            $result += $number;
-        }
-    }
-    unset($number);
-    return ($result !== -1) ?
-        'Result: ' . $result : 'You have not transferred numbers!';
+    $numbers = preg_grep('/\d/', str_split($numbers));
+    return ($numbers) ? 'Result: ' . array_sum($numbers) :
+        'You have not transmitted any numbers!';
 }
 
 // task 6
@@ -217,9 +218,9 @@ function randomArray()
 // task 7
 function countText()
 {
-    if (isset( $_POST['textarea'])) {
+    if (isset($_POST['textarea'])) {
         $text = checkInput($_POST['textarea']);
-        if(strlen($text)){
+        if(mb_strlen($text)){
             $text = str_replace( ["\r\n", "\r"], "\n", $text);
             $lines = substr_count($text, "\n") + 1;
             $text = str_replace( "\n", '', $text);
@@ -227,13 +228,14 @@ function countText()
             $text = preg_replace('/\s/', ' ', $text);
             $spaces = substr_count($text, ' ');
 
-            $characters = strlen($text) - $spaces;
+            $characters = mb_strlen($text) - $spaces;
 
             return 'Lines: ' . $lines . '<br>' .
                    'Spaces: ' . $spaces . '<br>' .
                    'Letters (emoji & special characters): ' . $characters;
         }
     }
+
     return 'You passed an empty string, try again!';
 }
 

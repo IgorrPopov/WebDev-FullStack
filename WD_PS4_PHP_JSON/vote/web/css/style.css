@@ -17,12 +17,7 @@ body, html {
   height: 100%;
   background: url('../images/rainbow.jpg') no-repeat center;
   background-size: cover;
-  filter: brightness(50%);
-}
-
-select {
-  font-size: 24px;
-  font-family: seagram, serif;
+  filter: brightness(25%);
 }
 
 .vote-form {
@@ -37,6 +32,24 @@ select {
   font-family: london, serif;
   color: white;
   font-size: 24px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error {
+  position: fixed;
+  width: 100%;
+  height: 34px;
+  top: 50%;
+  left: 50%;
+  margin-top: -20%;
+  margin-left: -50%;
+  text-align: center;
+  font-family: london, serif;
+  color: white;
+  font-size: 100px;
   z-index: 100;
 }
 
@@ -61,4 +74,10 @@ select {
   z-index: 101;
   top: 20px;
   left: 20px;
+}
+
+.vote-form__options {
+  text-align: left;
+  font-size: 24px;
+  font-family: seagram, serif;
 }

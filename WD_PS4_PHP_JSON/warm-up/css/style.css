@@ -63,13 +63,13 @@ a {
   color: white;
 }
 
-.small_img {
+.image__small {
   border: 2px solid black;
   max-width:100%;
   max-height:100%;
 }
 
-.small_img_wrapper {
+.image {
   position: absolute;
   display: none;
   width:300px;

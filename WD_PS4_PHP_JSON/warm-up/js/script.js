@@ -1,27 +1,33 @@
-$(document).ready(() => {
+const selectImageClass = 'image';
+const selectImageSmallClass = 'image__small';
+const selectPreviewClass = 'preview';
 
-    const $preview = $('.preview');
-    const OFFSET = 15;
+const OFFSET = 15; // pixels
 
-    $preview.hover(() => {
-        const $imgPath = $(event.target).attr('href');
+$(function () {
 
-        $('body').append('<div class="small_img_wrapper">' +
-            '<img src="' + $imgPath + '" class="small_img" /></div>');
+    const $preview = $(`.${selectPreviewClass}`); // select all "a" tags with images
 
-        $('.small_img_wrapper')
-            .css('top', (event.pageY + OFFSET) + 'px')
-            .css('left', (event.pageX + OFFSET) + 'px')
-            .fadeIn();
+    $preview.hover(
+        () => {
+            const $imgPath = $(event.target).attr('href');
 
+            $('body').append(
+                `<div class="${selectImageClass}">
+                  <img src="${$imgPath}" class="${selectImageSmallClass}" />
+                 </div>`);
 
-    },
+            $(`.${selectImageClass}`)
+                .css('top', (event.pageY + OFFSET) + 'px')
+                .css('left', (event.pageX + OFFSET) + 'px')
+                .fadeIn();
+        },
 
-        () => { $('.small_img_wrapper').remove(); }
+        () => { $(`.${selectImageClass}`).remove(); }
     );
 
     $preview.mousemove(() => {
-        $('.small_img_wrapper')
+        $(`.${selectImageClass}`)
             .css('top', (event.pageY + OFFSET) + 'px')
             .css('left', (event.pageX + OFFSET) + 'px')
     });
