@@ -1,18 +1,23 @@
 <?php
-    include_once
-        dirname(__DIR__) .
-        DIRECTORY_SEPARATOR .
-        'app' .
-        DIRECTORY_SEPARATOR .
-        'config' .
-        DIRECTORY_SEPARATOR .
-        'config.php';
+include_once
+    dirname(__DIR__) .
+    DIRECTORY_SEPARATOR .
+    'app' .
+    DIRECTORY_SEPARATOR .
+    'config' .
+    DIRECTORY_SEPARATOR .
+    'config.php';
 
-    include_once PATH_TO_JSON_COUNTER_CLASS;
+include_once PATH_TO_JSON_COUNTER_CLASS;
 
-    $songsCounter = new JsonSongsCounter(PATH_TO_JSON_FILE);
+$songsCounter = new module\JsonSongsCounter(PATH_TO_JSON_FILE);
+
+if (!$songsCounter->validateJsonFile()) {
+    $songsCounter->createJsonFile(DEFAULT_JSON_FILE_CONTENT);
+}
+
+$songsCounter->readJson();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

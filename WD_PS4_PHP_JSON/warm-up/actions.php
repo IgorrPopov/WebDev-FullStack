@@ -1,59 +1,54 @@
 <?php
-session_start();
-
 define('UPLOADED_FOLDER', 'uploaded_files' . DIRECTORY_SEPARATOR);
 
-define('IMG_EXT', [
-    'bmp',
-    'tif',
-    'tiff',
-    'gif',
-    'jpeg',
-    'jpg',
-    'png'
-]);
+define(
+    'IMG_EXT',
+    [
+        'bmp',
+        'tif',
+        'tiff',
+        'gif',
+        'jpeg',
+        'jpg',
+        'png'
+    ]
+);
 
-define('UPLOAD_FILE_MSG', [
-    UPLOAD_ERR_OK =>
-        'File uploaded successfully',
-    UPLOAD_ERR_INI_SIZE =>
-        'The uploaded file exceeds the upload_max_filesize directive in php.ini',
-    UPLOAD_ERR_FORM_SIZE =>
-        'The uploaded file exceeds the MAX_FILE_SIZE 
-         directive that was specified in the HTML form',
-    UPLOAD_ERR_PARTIAL =>
-        'The uploaded file was only partially uploaded',
-    UPLOAD_ERR_NO_FILE =>
-        'No file was uploaded',
-    UPLOAD_ERR_NO_TMP_DIR =>
-        'Missing a temporary folder',
-    UPLOAD_ERR_CANT_WRITE =>
-        'Failed to write file to disk',
-    UPLOAD_ERR_EXTENSION =>
-        'A PHP extension stopped the file upload'
-]);
+define(
+    'UPLOAD_FILE_MSG',
+    [
+        UPLOAD_ERR_OK =>
+            'File uploaded successfully',
+        UPLOAD_ERR_INI_SIZE =>
+            'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+        UPLOAD_ERR_FORM_SIZE =>
+            'The uploaded file exceeds the MAX_FILE_SIZE 
+             directive that was specified in the HTML form',
+        UPLOAD_ERR_PARTIAL =>
+            'The uploaded file was only partially uploaded',
+        UPLOAD_ERR_NO_FILE =>
+            'No file was uploaded',
+        UPLOAD_ERR_NO_TMP_DIR =>
+            'Missing a temporary folder',
+        UPLOAD_ERR_CANT_WRITE =>
+            'Failed to write file to disk',
+        UPLOAD_ERR_EXTENSION =>
+            'A PHP extension stopped the file upload'
+    ]
+);
 
-define('FUNCTIONS', [
-    'task1' => addition(),
-    'task2' => conditionAddition(),
-    'task3' => uploadFile(),
-    'task4' => chessboard(),
-    'task5' => digitsSum(),
-    'task6' => randomArray(),
-    'task7' => countText()
-]);
-
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if(count($_REQUEST)) {
-        end($_REQUEST);
-        $task = checkInput(key($_REQUEST));
-        $_SESSION[$task] = FUNCTIONS[$task];
-    }
-}
-
-$_SESSION['files_list'] = showFilesList();
-
-$_SESSION['textarea_input'] = $_POST['textarea'];
+define(
+    'FUNCTIONS',
+    [
+        'task1' => addition(),
+        'task2' => conditionAddition(),
+        'task3' => uploadFile(),
+        'task4' => chessboard(),
+        'task5' => digitsSum(),
+        'task6' => randomArray(),
+        'task7' => countText()
+    ]
+);
 
 function checkInput($input)
 {
@@ -78,7 +73,7 @@ function conditionAddition()
 {
     $result = 0;
     for ($i = -1000; $i <= 1000; $i++) {
-        if(in_array(abs($i % 10), [2, 3, 7])) {
+        if (in_array(abs($i % 10), [2, 3, 7])) {
             $result += $i;
         }
     }
@@ -88,8 +83,8 @@ function conditionAddition()
 // task 3
 function uploadFile()
 {
-    if(isset($_FILES['file'])){
-        if($_FILES['file']['error'] === UPLOAD_ERR_OK){
+    if (isset($_FILES['file'])) {
+        if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
             ifNeedCreateUploadedFolder(UPLOADED_FOLDER);
 
             $uploadedFile = UPLOADED_FOLDER . basename($_FILES['file']['name']);
@@ -101,7 +96,7 @@ function uploadFile()
 
 function ifNeedCreateUploadedFolder($pathToFolder)
 {
-    if(!file_exists($pathToFolder)) {
+    if (!file_exists($pathToFolder)) {
         mkdir($pathToFolder, 0700);
     }
 }
@@ -120,7 +115,7 @@ function createListOfLinks($files)
 
     for ($i = 0; $i < $arraySize; $i++) {
         $ext =  pathinfo(UPLOADED_FOLDER . $files[$i], PATHINFO_EXTENSION);
-        if(in_array($ext, IMG_EXT)){
+        if (in_array($ext, IMG_EXT)) {
             $linksList .= '<a href="' . UPLOADED_FOLDER . $files[$i] . '" class="preview" 
             download>' . $files[$i] . ' ('. $filesSize[$i] .')' . '</a><br />';
         } else {
@@ -135,7 +130,7 @@ function createListOfLinks($files)
 function findSize($files, $arraySize)
 {
     $filesSize = [];
-    for ($i = 0; $i < $arraySize; $i++){
+    for ($i = 0; $i < $arraySize; $i++) {
         $filesSize[] =
             convertSize(filesize(UPLOADED_FOLDER . $files[$i]));
     }
@@ -157,14 +152,14 @@ function chessboard()
     $cellSizePx = 20;
     $rows = isset($_POST['rows']) ? checkInput($_POST['rows']) : '';
     $columns = isset($_POST['columns']) ? checkInput($_POST['columns']) : '';
-    if(empty($rows) || empty($columns)) {
+    if (empty($rows) || empty($columns)) {
         return 'Enter both dimensions!';
     }
     if (!preg_match('/^[1-9]([0-9]*)$/', $rows) ||
         !preg_match('/^[1-9]([0-9]*)$/', $columns)) {
         return 'Invalid input!';
     }
-    if($rows > $maxSize || $columns > $maxSize) {
+    if ($rows > $maxSize || $columns > $maxSize) {
         return 'Maximum size of dimensions is ' . $maxSize . '!';
     }
     return createChessboard($rows, $columns, $cellSizePx);
@@ -195,7 +190,7 @@ function addCell($size, $color)
 function digitsSum()
 {
     $numbers = isset($_POST['number']) ? checkInput($_POST['number']) : '';
-    if(empty($numbers)) {
+    if (empty($numbers)) {
         return 'Empty input!';
     }
     $numbers = preg_grep('/\d/', str_split($numbers));
@@ -220,10 +215,10 @@ function countText()
 {
     if (isset($_POST['textarea'])) {
         $text = checkInput($_POST['textarea']);
-        if(mb_strlen($text)){
-            $text = str_replace( ["\r\n", "\r"], "\n", $text);
+        if (mb_strlen($text)) {
+            $text = str_replace(["\r\n", "\r"], "\n", $text);
             $lines = substr_count($text, "\n") + 1;
-            $text = str_replace( "\n", '', $text);
+            $text = str_replace("\n", '', $text);
 
             $text = preg_replace('/\s/', ' ', $text);
             $spaces = substr_count($text, ' ');
@@ -238,5 +233,3 @@ function countText()
 
     return 'You passed an empty string, try again!';
 }
-
-header('Location: index.php');

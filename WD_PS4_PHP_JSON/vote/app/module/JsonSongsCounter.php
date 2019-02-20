@@ -1,13 +1,5 @@
 <?php
-
-include_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'app' .
-    DIRECTORY_SEPARATOR .
-    'config' .
-    DIRECTORY_SEPARATOR .
-    'config.php';
+namespace module;
 
 class JsonSongsCounter
 {
@@ -17,46 +9,41 @@ class JsonSongsCounter
     public function __construct($filePath)
     {
         $this->filePath = $filePath;
-        $this->validateJsonFile();
-        $this->readJson();
     }
 
-    private function validateJsonFile()
+    public function validateJsonFile()
     {
-        if (!file_exists($this->filePath)) {
-            $this->createJsonFile();
-        }
+        return (file_exists($this->filePath));
     }
 
-    private function createJsonFile()
+    public function createJsonFile($jsonFileContent)
     {
         if (!file_exists(dirname($this->filePath))) {
             mkdir(dirname($this->filePath), 0700);
         }
 
         fopen($this->filePath, 'w')
-            or die ('Could not create the file "' . JSON_FILE_NAME . '"');
-        $this->addContentToJsonFile();
+            or die('Could not create the file "' . basename($this->filePath) . '"');
+        $this->addContentToJsonFile($jsonFileContent);
     }
 
-    private function addContentToJsonFile()
+    private function addContentToJsonFile($jsonFileContent)
     {
-        $this->songs = DEFAULT_JSON_FILE_CONTENT;
+        $this->songs = $jsonFileContent;
         $this->writeJson();
     }
 
-    private function readJson()
+    public function readJson()
     {
-        set_error_handler(function ()
-        {
+        set_error_handler(function () {
             echo '<h1>An error occurred while reading the file "' .
-                  JSON_FILE_NAME . '"!</h1>';
+                  basename($this->filePath) . '"!</h1>';
             die();
         });
 
-        $this->songs = json_decode(file_get_contents($this->filePath),true);
+        $this->songs = json_decode(file_get_contents($this->filePath), true);
 
-        if(json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             trigger_error('');
         }
 
@@ -65,7 +52,7 @@ class JsonSongsCounter
 
     public function voteForSong($songName)
     {
-        if(array_key_exists($songName, $this->songs)){
+        if (array_key_exists($songName, $this->songs)) {
             $this->songs[$songName][0]++;
         } else {
             return false; // if json doesn't have transferred song
@@ -75,19 +62,18 @@ class JsonSongsCounter
 
     public function writeJson()
     {
-        set_error_handler(function ()
-        {
+        set_error_handler(function () {
             echo '<h1>An error occurred while writing the file "' .
-                  JSON_FILE_NAME . '"!<h1/>.';
+                  basename($this->filePath) . '"!<h1/>.';
             die();
         });
 
         file_put_contents(
             $this->filePath,
-            json_encode($this->songs,JSON_PRETTY_PRINT)
+            json_encode($this->songs, JSON_PRETTY_PRINT)
         );
 
-        if(json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             trigger_error('');
         }
 
