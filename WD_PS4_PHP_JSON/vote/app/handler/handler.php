@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 include_once
     dirname(__DIR__) .
     DIRECTORY_SEPARATOR .
@@ -8,25 +11,22 @@ include_once
 
 include_once PATH_TO_JSON_COUNTER_CLASS;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['song'])) {
-        $counter = new module\JsonSongsCounter(PATH_TO_JSON_FILE);
-
-        if (!$counter->validateJsonFile()) {
-            $counter->createJsonFile(DEFAULT_JSON_FILE_CONTENT);
-        }
-
-        $counter->readJson();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['song'])) {
+    try {
+        $songsCounter = new module\JsonSongsCounter(
+            PATH_TO_JSON_FILE,
+            DEFAULT_JSON_FILE_CONTENT
+        );
 
         $song = trim($_POST['song']);
         $song = stripslashes($song);
         $song = htmlspecialchars($song);
 
-        if (!$counter->voteForSong($song)) {
-            header('Location: ../../web/404.html'); // if json doesn't have transferred song
-            die();
-        }
-        $counter->writeJson();
+        $songsCounter->voteForSong($song);
+    } catch (Exception $exception) {
+        $_SESSION['error'] = $exception->getMessage();
+        header('Location: ../../web/error_page.php');
+        die();
     }
 }
 

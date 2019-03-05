@@ -1,3 +1,5 @@
+<?php session_start() ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +12,15 @@
 <body>
 <div class="vote-page"></div>
 <div class="error">
-  <h1>404 not found</h1>
+  <h1>
+    <?php
+    if ($_SESSION['error'] === '404') {
+        echo '<div class="error_404">404</div>';
+    } else {
+        echo $_SESSION['error'];
+    }
+    ?>
+  </h1>
 </div>
 </body>
 </html>

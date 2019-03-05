@@ -1,4 +1,5 @@
 <?php
+
 namespace module;
 
 class JsonSongsCounter
@@ -6,48 +7,81 @@ class JsonSongsCounter
     private $filePath;
     private $songs;
 
-    public function __construct($filePath)
+    public function __construct($filePath, $defaultSongsList)
     {
         $this->filePath = $filePath;
+        $this->validateJsonDatabase($defaultSongsList);
+        $this->readJsonDatabase();
     }
 
-    public function validateJsonFile()
+    private function validateJsonDatabase($defaultSongsList)
     {
-        return (file_exists($this->filePath));
+        if (!$this->validateDatabaseFolder()) {
+            throw new \Exception('An error occurred "Cannot create database folder!"');
+        }
+
+        if (!$this->validateDatabaseJsonFile($defaultSongsList)) {
+            throw new \Exception('An error occurred "Database is corrupted!"');
+        }
     }
 
-    public function createJsonFile($jsonFileContent)
+    private function validateDatabaseFolder()
     {
         if (!file_exists(dirname($this->filePath))) {
-            mkdir(dirname($this->filePath), 0700);
+            return mkdir(dirname($this->filePath), 0700);
         }
 
-        fopen($this->filePath, 'w')
-            or die('Could not create the file "' . basename($this->filePath) . '"');
-        $this->addContentToJsonFile($jsonFileContent);
+        return true;
     }
 
-    private function addContentToJsonFile($jsonFileContent)
+    private function validateDatabaseJsonFile($defaultSongsList)
     {
-        $this->songs = $jsonFileContent;
-        $this->writeJson();
+        if (!is_file($this->filePath) || !is_readable($this->filePath)
+            || !is_writable($this->filePath)) {
+            return $this->createDefaultDatabaseJsonFile($defaultSongsList);
+        }
+
+        return true;
     }
 
-    public function readJson()
+    private function createDefaultDatabaseJsonFile($defaultSongsList)
     {
-        set_error_handler(function () {
-            echo '<h1>An error occurred while reading the file "' .
-                  basename($this->filePath) . '"!</h1>';
-            die();
-        });
+        if (!fopen($this->filePath, 'w')) {
+            return false;
+        }
 
-        $this->songs = json_decode(file_get_contents($this->filePath), true);
+        return $this->addContentToJsonFile($defaultSongsList);
+    }
+
+    private function addContentToJsonFile($defaultSongsList)
+    {
+        $this->songs = $defaultSongsList;
+        return $this->writeJson();
+    }
+
+    private function writeJson()
+    {
+        file_put_contents(
+            $this->filePath,
+            json_encode($this->songs, JSON_PRETTY_PRINT)
+        );
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            trigger_error('');
+            return false;
         }
 
-        restore_error_handler();
+        return true;
+    }
+
+    private function readJsonDatabase()
+    {
+        if (!$this->songs) { // if songs get from createDefaultDatabaseJsonFile()
+            $this->songs = json_decode(file_get_contents($this->filePath), true);
+        }
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception('An error occurred "Cannot read json database file!"');
+        }
     }
 
     public function voteForSong($songName)
@@ -55,29 +89,12 @@ class JsonSongsCounter
         if (array_key_exists($songName, $this->songs)) {
             $this->songs[$songName][0]++;
         } else {
-            return false; // if json doesn't have transferred song
-        }
-        return true;
-    }
-
-    public function writeJson()
-    {
-        set_error_handler(function () {
-            echo '<h1>An error occurred while writing the file "' .
-                  basename($this->filePath) . '"!<h1/>.';
-            die();
-        });
-
-        file_put_contents(
-            $this->filePath,
-            json_encode($this->songs, JSON_PRETTY_PRINT)
-        );
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            trigger_error('');
+            throw new \Exception('404'); // if json doesn't have transferred song
         }
 
-        restore_error_handler();
+        if (!$this->writeJson()) {
+            throw new \Exception('An error occurred "Database is corrupted!"');
+        }
     }
 
     public function getRating()

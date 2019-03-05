@@ -70,13 +70,7 @@ if (isset($_SESSION['visits'])) {
     }
     ?>
   </div>
-  <div><!-- print list of links -->
-    <?php
-    if (isset($_SESSION['files_list'])) {
-        echo $_SESSION['files_list'];
-    }
-    ?>
-  </div>
+  <div class="links-list"></div>
 </section>
 <section class="task">
   <h1>TASK 4</h1>
@@ -88,7 +82,12 @@ if (isset($_SESSION['visits'])) {
   </form>
   <div class="task__answer">
     <?php
-    if (isset($_SESSION['task4'])) {
+    if (isset($_SESSION['task4']) && preg_match('/chessboard/', $_SESSION['task4'])) {
+        $response = explode(' ', $_SESSION['task4']);
+        echo '<div class="' .
+            $response[0] . '" id="' . $response[1] . 'x' . $response[2] . '"></ div>';
+        unset($_SESSION['task4']);
+    } elseif (isset($_SESSION['task4'])) {
         echo $_SESSION['task4'];
         unset($_SESSION['task4']);
     }
@@ -138,8 +137,8 @@ if (isset($_SESSION['visits'])) {
   <form action="handler.php" method="post">
     <label for="textarea">Enter your text:</label><br>
     <textarea name="textarea" id="textarea" cols="30" rows="10"><?php
-    if (isset($_SESSION['textarea_input'])) {
-        echo $_SESSION['textarea_input'];
+    if (isset($_COOKIE['textarea'])) {
+        echo $_COOKIE['textarea'];
     }
     ?></textarea>
     <input type="submit" name="task7" value="GO!">

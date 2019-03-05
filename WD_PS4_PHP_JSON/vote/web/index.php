@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include_once
     dirname(__DIR__) .
     DIRECTORY_SEPARATOR .
@@ -10,13 +12,16 @@ include_once
 
 include_once PATH_TO_JSON_COUNTER_CLASS;
 
-$songsCounter = new module\JsonSongsCounter(PATH_TO_JSON_FILE);
-
-if (!$songsCounter->validateJsonFile()) {
-    $songsCounter->createJsonFile(DEFAULT_JSON_FILE_CONTENT);
+try {
+    $songsCounter = new module\JsonSongsCounter(
+        PATH_TO_JSON_FILE,
+        DEFAULT_JSON_FILE_CONTENT
+    );
+} catch (Exception $exception) {
+    $_SESSION['error'] = $exception->getMessage();
+    header('Location: error_page.php');
+    die();
 }
-
-$songsCounter->readJson();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,10 +35,10 @@ $songsCounter->readJson();
 <body>
 <div class="vote-page"></div>
 <div class="vote-form">
-  <h1>Choose your favorite Ronnie James Dio song from his top 10 tracks</h1>
+  <h2>Choose your favorite Ronnie James Dio song from his top 10 tracks</h2>
   <form action="../app/handler/handler.php" method="post">
     <div class="vote-form__options">
-        <?= $songsCounter->createVoteOptions(); ?>
+      <?= $songsCounter->createVoteOptions(); ?>
     </div><br>
     <input type="submit" name="submit" value="Vote" class="button">
   </form>

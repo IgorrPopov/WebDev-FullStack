@@ -1,13 +1,3 @@
-@font-face {
-  src: url("../fonts/london/OldLondonAlternate.ttf");
-  font-family: london;
-}
-
-@font-face {
-  src: url("../fonts/seagram/Seagram.ttf");
-  font-family: seagram;
-}
-
 body, html {
   height: 100%;
   margin: 0;
@@ -29,7 +19,6 @@ body, html {
   margin-top: -20%;
   margin-left: -50%;
   text-align: center;
-  font-family: london, serif;
   color: white;
   font-size: 24px;
   z-index: 100;
@@ -47,16 +36,17 @@ body, html {
   margin-top: -20%;
   margin-left: -50%;
   text-align: center;
-  font-family: london, serif;
   color: white;
-  font-size: 100px;
   z-index: 100;
+}
+
+.error_404 {
+font-size: 100px;
 }
 
 .button {
   background-color: white;
   font-size: 24px;
-  font-family: seagram, serif;
 }
 
 #piechart_3d {
@@ -79,5 +69,8 @@ body, html {
 .vote-form__options {
   text-align: left;
   font-size: 24px;
-  font-family: seagram, serif;
+}
+
+label {
+  cursor: pointer;
 }

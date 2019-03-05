@@ -1,5 +1,6 @@
 <?php
-define('JSON_FILE_NAME', 'dio_top_songs.json');
+
+const JSON_FILE_NAME = 'dio_top_songs.json';
 
 define(
     'PATH_TO_JSON_FILE',
@@ -23,8 +24,7 @@ define(
     'JsonSongsCounter.php'
 );
 
-define(
-    'DEFAULT_JSON_FILE_CONTENT',
+const DEFAULT_JSON_FILE_CONTENT =
     array(
         "stargazer" => [
             10389,
@@ -65,5 +65,5 @@ define(
         "neon_knights" => [
             3005,
             "\"Neon Knights\" by Black Sabbath (Heaven and Hell 1980)"
-        ])
-);
+        ]
+    );
