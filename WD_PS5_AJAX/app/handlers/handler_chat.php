@@ -1,85 +1,53 @@
 <?php
 session_start();
 
-include_once
+require_once
     dirname(__DIR__) .
     DIRECTORY_SEPARATOR .
     'config' .
     DIRECTORY_SEPARATOR .
     'config.php';
 
-include_once
+require_once
     dirname(__DIR__) .
     DIRECTORY_SEPARATOR .
-    'modules' .
+    'modules_loader' .
     DIRECTORY_SEPARATOR .
-    'JsonFileChecker.php';
-
-include_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'modules' .
-    DIRECTORY_SEPARATOR .
-    'JsonFileWriter.php';
-
-include_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'modules' .
-    DIRECTORY_SEPARATOR .
-    'JsonFileReader.php';
-
-include_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'modules' .
-    DIRECTORY_SEPARATOR .
-    'InputValidator.php';
+    'modules_loader.php';
 
 if (isset($_POST['new_message']) && isset($_SESSION['logged_in_user'])) {
-    $newMessage = InputValidator::validateInput($_POST['new_message']);
 
-    if (strlen($newMessage) == 0) {
+    $newMessage = app\modules\InputValidator::validateInput($_POST['new_message']);
+
+    if (mb_strlen($newMessage) === 0) {
+
         echo 'Type something!';
+
     } elseif (mb_strlen($newMessage) > MAX_MESSAGE_LENGTH) {
+
         echo 'Maximum message length is ' . MAX_MESSAGE_LENGTH . ' characters!';
+
     } else {
-        $time = InputValidator::validateInput($_POST['time']);
-        $name = InputValidator::validateInput($_SESSION['logged_in_user']);
 
-        $jsonChecker = new JsonFileChecker(
-            PATH_TO_JSON_CHAT_FILE,
-            JSON_CHAT_FILE_NAME
-        );
+        $time = app\modules\InputValidator::validateInput($_POST['time']);
+        $name = $_SESSION['logged_in_user'];
 
-        $jsonChecker->validateJsonFile();
-
-        $jsonReader = new JsonFileReader(
-            PATH_TO_JSON_CHAT_FILE,
-            JSON_CHAT_FILE_NAME
-        );
-
-        $jsonDatabase = $jsonReader->getJsonFileContent();
-
-        $jsonWriter = new JsonFileWriter(
-            PATH_TO_JSON_CHAT_FILE,
-            JSON_CHAT_FILE_NAME
-        );
-
-        if (!$jsonDatabase) { // if json file is empty
-            $jsonWriter->writeJson(
-                array($time => array(
-                    'name' => $name,
-                    'message' => $newMessage)
-                )
+        try {
+            $databaseHandler = new \app\modules\DatabaseHandler(
+                PATH_TO_JSON_CHAT_FILE
             );
-        } else {
-            $jsonDatabase[$time] = array(
+
+            $database = $databaseHandler->getDatabase();
+            $database[$time] = array(
                 'name' => $name,
                 'message' => $newMessage
             );
 
-            $jsonWriter->writeJson($jsonDatabase);
+            $databaseHandler->writeToDatabase($database);
+        } catch (Exception $exception) {
+            $_SESSION['error'] = $exception->getMessage();
+            echo 'exception';
+            die();
         }
 
         echo ''; // now errors was find
@@ -87,31 +55,25 @@ if (isset($_POST['new_message']) && isset($_SESSION['logged_in_user'])) {
 }
 
 if (isset($_POST['load_chat'])) {
-    $jsonChecker = new JsonFileChecker(
-        PATH_TO_JSON_CHAT_FILE,
-        JSON_CHAT_FILE_NAME
-    );
 
-    $jsonChecker->validateJsonFile();
+    try {
+        $databaseHandler = new \app\modules\DatabaseHandler(
+            PATH_TO_JSON_CHAT_FILE
+        );
 
-    $jsonReader = new JsonFileReader(
-        PATH_TO_JSON_CHAT_FILE,
-        JSON_CHAT_FILE_NAME
-    );
+        $database = $databaseHandler->getDatabase();
+    } catch (Exception $exception) {
+        $_SESSION['error'] = $exception->getMessage();
+        echo 'exception';
+        die();
+    }
 
-    $jsonDatabase = $jsonReader->getJsonFileContent();
-
-    $jsonWriter = new JsonFileWriter(
-        PATH_TO_JSON_CHAT_FILE,
-        JSON_CHAT_FILE_NAME
-    );
-
-    if ($jsonDatabase) {
+    if ($database) {
         // get current time in milliseconds
         $currentTime = round(microtime(true) * 1000);
         $messagesForLastHour = [];
 
-        foreach ($jsonDatabase as $time => $nameAndMessage) { // an hour has passed or not
+        foreach ($database as $time => $nameAndMessage) { // an hour has passed or not
             if (($currentTime - (float)$time) <= MILLISECONDS_IN_HOUR) {
                 $messagesForLastHour[$time] = $nameAndMessage;
             }

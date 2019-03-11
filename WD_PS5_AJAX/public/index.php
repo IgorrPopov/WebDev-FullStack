@@ -15,30 +15,19 @@
   </head>
   <body>
     <header class="header">
-      <div class="top-line">
-        <div class="top-line__block" style="background: #635960"></div>
-        <div class="top-line__block" style="background: #8b8e59"></div>
-        <div class="top-line__block" style="background: #eada7d"></div>
-        <div class="top-line__block" style="background: #fffecd"></div>
-        <div class="top-line__block" style="background: #7bc3ab"></div>
-        <div class="top-line__block" style="background: #635960"></div>
-        <div class="top-line__block" style="background: #8b8e59"></div>
-        <div class="top-line__block" style="background: #eada7d"></div>
-        <div class="top-line__block" style="background: #fffecd"></div>
-        <div class="top-line__block" style="background: #7bc3ab"></div>
-      </div>
+      <div class="top-line"></div>
     </header>
     <div class="chat-wrapper">
-        <?php
-        require_once
-            dirname(__DIR__) .
-            DIRECTORY_SEPARATOR .
-            'app' .
-            DIRECTORY_SEPARATOR .
-            'templates' .
-            DIRECTORY_SEPARATOR .
-            (isset($_SESSION['logged_in_user']) ? 'chat_form.php' : 'login_form.php');
-        ?>
+      <?php
+      require_once
+          dirname(__DIR__) .
+          DIRECTORY_SEPARATOR .
+          'app' .
+          DIRECTORY_SEPARATOR .
+          'templates' .
+          DIRECTORY_SEPARATOR .
+          (isset($_SESSION['logged_in_user']) ? 'chat_form.php' : 'login_form.php');
+      ?>
     </div>
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/auth_script.js"></script>

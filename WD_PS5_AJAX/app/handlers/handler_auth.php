@@ -1,40 +1,19 @@
 <?php
 session_start();
 
-include_once
+require_once
     dirname(__DIR__) .
     DIRECTORY_SEPARATOR .
     'config' .
     DIRECTORY_SEPARATOR .
     'config.php';
 
-include_once
+require_once
     dirname(__DIR__) .
     DIRECTORY_SEPARATOR .
-    'modules' .
+    'modules_loader' .
     DIRECTORY_SEPARATOR .
-    'JsonFileChecker.php';
-
-include_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'modules' .
-    DIRECTORY_SEPARATOR .
-    'JsonFileWriter.php';
-
-include_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'modules' .
-    DIRECTORY_SEPARATOR .
-    'JsonFileReader.php';
-
-include_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'modules' .
-    DIRECTORY_SEPARATOR .
-    'InputValidator.php';
+    'modules_loader.php';
 
 if (isset($_POST['log_out']) && isset($_SESSION['logged_in_user'])) {
     unset($_SESSION['logged_in_user']);
@@ -42,8 +21,8 @@ if (isset($_POST['log_out']) && isset($_SESSION['logged_in_user'])) {
 }
 
 if (isset($_POST['submit'])) {
-    $name = InputValidator::validateInput($_POST['name']);
-    $password = InputValidator::validateInput($_POST['password']);
+    $name = app\modules\InputValidator::validateInput($_POST['name']);
+    $password = app\modules\InputValidator::validateInput($_POST['password']);
 
     $errors = [];
 
@@ -63,37 +42,30 @@ if (isset($_POST['submit'])) {
         $errors['password'] = 'Max password size is ' . MAX_INPUT_LENGTH;
     }
 
-    if (empty($errors)) {
-        // both fields are valid, check user password
-        $jsonChecker = new JsonFileChecker(
-            PATH_TO_JSON_AUTH_FILE,
-            JSON_AUTH_FILE_NAME
-        );
+    if (empty($errors)) { // both fields are valid, check user password
+        try {
+            $databaseHandler = new \app\modules\DatabaseHandler(
+                PATH_TO_JSON_AUTH_FILE
+            );
+            $database = $databaseHandler->getDatabase();
 
-        $jsonChecker->validateJsonFile(); // create json if need
+            if (!$database) { // if json file is empty
+                $databaseHandler->writeToDatabase(array($name => $password));
+            } else {
+                if (array_key_exists($name, $database) && // old user with wrong password
+                    $database[$name] !== $password) {
 
-        $jsonReader = new JsonFileReader(
-            PATH_TO_JSON_AUTH_FILE,
-            JSON_AUTH_FILE_NAME
-        );
-
-        $jsonDatabase = $jsonReader->getJsonFileContent();
-
-        $jsonWriter = new JsonFileWriter(
-            PATH_TO_JSON_AUTH_FILE,
-            JSON_AUTH_FILE_NAME
-        );
-
-        if (!$jsonDatabase) { // if json file is empty
-            $jsonWriter->writeJson(array($name => $password));
-        } else {
-            if (array_key_exists($name, $jsonDatabase) && // old user with wrong password
-                $jsonDatabase[$name] !== $password) {
-                $errors['password'] = 'Wrong password!';
-            } else { // new user
-                $jsonDatabase[$name] = $password;
-                $jsonWriter->writeJson($jsonDatabase);
+                    $errors['password'] = 'Wrong password!';
+                } else { // new user
+                    $database[$name] = $password;
+                    $databaseHandler->writeToDatabase($database);
+                }
             }
+
+        } catch (Exception $exception) {
+            $_SESSION['error'] = $exception->getMessage();
+            echo 'exception';
+            die();
         }
 
         if (empty($errors)) {

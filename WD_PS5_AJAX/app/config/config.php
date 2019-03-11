@@ -1,11 +1,11 @@
 <?php
 
-define('JSON_AUTH_FILE_NAME', 'auth_database.json');
-define('JSON_CHAT_FILE_NAME', 'chat_database.json');
+const JSON_AUTH_FILE_NAME = 'auth_database.json';
+const JSON_CHAT_FILE_NAME = 'chat_database.json';
 
-define('MILLISECONDS_IN_HOUR', 3600000);
-define('MAX_INPUT_LENGTH', 20);
-define('MAX_MESSAGE_LENGTH', 120);
+const MILLISECONDS_IN_HOUR = 3600000;
+const MAX_INPUT_LENGTH = 20;
+const MAX_MESSAGE_LENGTH = 120;
 
 define(
     'PATH_TO_JSON_AUTH_FILE',

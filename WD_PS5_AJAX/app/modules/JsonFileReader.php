@@ -1,38 +1,18 @@
 <?php
+namespace app\modules;
 
 class JsonFileReader
 {
-    private $pathToFile;
-    private $fileName;
-    private $authDatabase;
-
-    public function __construct($pathToFile, $fileName)
+    public static function getJsonDatabase($pathToFile)
     {
-        $this->pathToFile = $pathToFile;
-        $this->fileName = $fileName;
-    }
-
-    public function getJsonFileContent()
-    {
-        set_error_handler(function () {
-            echo '<h1>An error occurred while reading the file "' .
-                $this->fileName . '"!</h1>';
-            die();
-        });
-
-        $this->authDatabase
-            = json_decode(file_get_contents($this->pathToFile), true);
+        $database = json_decode(file_get_contents($pathToFile), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            trigger_error('');
-        } else {
-            restore_error_handler();
-
-            return $this->authDatabase;
+            throw new \Exception(
+                'An error occurred "Cannot read json database file!"'
+            );
         }
 
-        restore_error_handler();
-
-        return false;
+        return $database;
     }
 }

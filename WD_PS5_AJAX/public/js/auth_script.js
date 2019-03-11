@@ -24,6 +24,7 @@ $(() => {
     $welcomeMessage.fadeIn(TIME_DELAY);
     setTimeout(() => $welcomeMessage.fadeOut(TIME_DELAY), TIME_DELAY);
 
+
     $(`.${selectLoginFormClass}`).on('submit', (event) => {
 
         event.preventDefault();
@@ -33,21 +34,28 @@ $(() => {
             password: $(`.${selectLoginFormPasswordClass}`).val(),
             submit: 'submit'
         }, (errorResponse) => {
-            if (errorResponse) { // handler gave us some errors
+            if (errorResponse === 'exception') { // handler gave us an exception
+                window.location = 'error_page.php';
+            } else if (errorResponse) { // handler gave us some errors
                 errorResponse = JSON.parse(errorResponse);
                 highlightInputErrors(errorResponse);
                 addErrorsMessages(errorResponse);
-            } else { // no errors
+            } else { // no errors or exception
                 location.reload();
             }
+        }).fail((xhr, status, error) => { // ajax fail
+            handleAjaxError(status + ' ' + xhr.status + ' ' + error);
         });
     });
+
 
     $(`.${selectLoginOutButtonClass}`).on('click', () => {
         $.post(PATH_TO_AUTH_HANDLER, {
             log_out: 'log_out'
         }, () => {
             location.reload();
+        }).fail((xhr, status, error) => { // ajax fail
+            handleAjaxError(status + ' ' + xhr.status + ' ' + error);
         });
     });
 });
@@ -80,3 +88,7 @@ function printWelcomeMessage() {
     }, 2000);
 }
 
+function handleAjaxError(errorMsg) {
+    localStorage.setItem('ajax_error', errorMsg.toLowerCase());
+    window.location = 'error_page.php';
+}
