@@ -1,0 +1,14 @@
+Kaushan - for logo.
+http://www.google.com/fonts/specimen/Kaushan+Script
+
+
+Black Jack -  for Header's heading. 
+You can find it in black_jack_font folder
+
+
+Proxima Nova - is NOT FREE font. So use Montserrat instead for other content.
+http://www.google.com/fonts/specimen/Montserrat
+
+
+Font Awesome - for icons
+http://fortawesome.github.io/Font-Awesome/

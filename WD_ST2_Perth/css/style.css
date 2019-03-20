@@ -1,0 +1,80 @@
+/*@font-face {*/
+  /*src: url("../fonts/london/OldLondonAlternate.ttf");*/
+  /*font-family: london;*/
+/*}*/
+
+.html, body {
+  margin: 0;
+}
+
+.header {
+  background-color: #00C1EA;
+  height: 679px;
+  width: 100%;
+}
+
+.block__longwinded-header {
+  background-color: #F4F4F4;
+  height: 300px;
+  width: 100%;
+}
+
+.block__dog-up-ya {
+  background-color: #FFFFFF;
+  height: 300px;
+  width: 100%;
+}
+
+.block__what-you-see {
+  background-color: #01C2AD;
+  height: 300px;
+  width: 100%;
+}
+
+.footer {
+  background-color: #F4F4F4;
+  height: 300px;
+  width: 100%;
+}
+
+.logo {
+  width: 110px;
+  height: 110px;
+  background-color: #F4F4F4;
+  margin-left: 170px;
+  text-align: center;
+  padding: auto;
+  color: #00C1EA;
+  /*float: right;*/
+}
+
+.logo-iphone {
+  margin-left: 245px;
+  float: left;
+}
+
+.button-download {
+  width: 175px;
+  height: 50px;
+  border-color: #F4F4F4;
+  border-width: 2px;
+  background-color: #00C1EA;
+}
+
+.menu-icon {
+  width: 34px;
+  height: 24px;
+}
+
+.menu-icon__block {
+  margin: 1px;
+  width: 34px;
+  height: 3px;
+  background-color: #FFFFFF;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
