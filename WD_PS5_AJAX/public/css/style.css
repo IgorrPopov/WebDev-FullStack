@@ -154,9 +154,11 @@ body {
 
 .error-message {
   position: absolute;
-  bottom: 5px;
+  bottom: 0;
   color: red;
-  font-size: xx-small;
+  font-family: 'Montserrat', cursive;
+  font-size: small;
+  font-weight: bold;
   margin: 0;
   padding: 0;
   user-select: none;
@@ -164,7 +166,9 @@ body {
 
 .empty-message {
   color: blue;
+  font-family: 'Montserrat', cursive;
   font-size: small;
+  font-weight: bold;
   margin: 0;
   padding: 0;
   user-select: none;
@@ -202,20 +206,4 @@ body {
   width: 15px;
   height: 15px;
   vertical-align: center;
-}
-
-.server-error {
-  color: #fffecd;
-  margin-top: 0;
-  padding-top: 60px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-family: 'Pacifico', sans-serif;
-  font-weight: inherit;
-  font-size: 40px;
-  user-select: none;
-}
-
-.server-error__msg {
-  color: red;
 }

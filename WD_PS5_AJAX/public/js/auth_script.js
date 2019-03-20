@@ -1,6 +1,4 @@
-const WELCOME_MESSAGE = 'Hello Friend!';
-
-const PATH_TO_AUTH_HANDLER = '../app/handlers/handler_auth.php';
+const PATH_TO_AUTH_ROUTER = './router/router.php';
 
 const TIME_DELAY = 2000;
 
@@ -10,7 +8,6 @@ const selectLoginFormPasswordClass = 'login-form__password';
 const selectInputErrorClass = 'input-error';
 const selectErrorMessageClass = 'error-message';
 const selectWelcomeMessageClass = 'welcome-message';
-const selectChatFormClass = 'chat__form';
 const selectLoginOutButtonClass = 'login-out-button';
 
 const getClassNameByInputName = {
@@ -19,43 +16,50 @@ const getClassNameByInputName = {
 };
 
 $(() => {
+    // show welcome message
     const $welcomeMessage = $(`.${selectWelcomeMessageClass}`);
 
     $welcomeMessage.fadeIn(TIME_DELAY);
     setTimeout(() => $welcomeMessage.fadeOut(TIME_DELAY), TIME_DELAY);
 
 
+    // login logic
     $(`.${selectLoginFormClass}`).on('submit', (event) => {
 
         event.preventDefault();
 
-        $.post(PATH_TO_AUTH_HANDLER, {
+        $.post(PATH_TO_AUTH_ROUTER, {
+            router: 'auth',
             name: $(`.${selectLoginFormNameClass}`).val(),
             password: $(`.${selectLoginFormPasswordClass}`).val(),
             submit: 'submit'
-        }, (errorResponse) => {
-            if (errorResponse === 'exception') { // handler gave us an exception
-                window.location = 'error_page.php';
-            } else if (errorResponse) { // handler gave us some errors
-                errorResponse = JSON.parse(errorResponse);
-                highlightInputErrors(errorResponse);
-                addErrorsMessages(errorResponse);
-            } else { // no errors or exception
+        }, (response) => {
+            response = JSON.parse(response);
+
+            if (response.status === 'success') {
                 location.reload();
+            } else if (response.exception) { // backend trow an exception
+                handleServerError(response.exception);
+            } else { // handler gave us some input errors
+                highlightInputErrors(response);
+                addErrorsMessages(response);
             }
+
         }).fail((xhr, status, error) => { // ajax fail
-            handleAjaxError(status + ' ' + xhr.status + ' ' + error);
+            handleServerError(status + ' ' + xhr.status + ' ' + error);
         });
     });
 
 
+    // login out logic
     $(`.${selectLoginOutButtonClass}`).on('click', () => {
-        $.post(PATH_TO_AUTH_HANDLER, {
+        $.post(PATH_TO_AUTH_ROUTER, {
+            router: 'auth',
             log_out: 'log_out'
         }, () => {
             location.reload();
         }).fail((xhr, status, error) => { // ajax fail
-            handleAjaxError(status + ' ' + xhr.status + ' ' + error);
+            handleServerError(status + ' ' + xhr.status + ' ' + error);
         });
     });
 });
@@ -79,16 +83,11 @@ function addErrorsMessages(errors) {
     }
 }
 
-function printWelcomeMessage() {
-    $(`.${selectChatFormClass}`)
-        .after(`<div class="${selectWelcomeMessageClass}">${WELCOME_MESSAGE}</ div>`);
-
-    setTimeout(() => {
-        $(`.${selectWelcomeMessageClass}`).fadeOut();
-    }, 2000);
-}
-
-function handleAjaxError(errorMsg) {
-    localStorage.setItem('ajax_error', errorMsg.toLowerCase());
-    window.location = 'error_page.php';
+function handleServerError(errorMsg) {
+    swal({ // using sweetalert)
+        title: "Sorry, our server is temporarily unavailable! Please try again later",
+        text: errorMsg.toUpperCase(),
+        icon: "error",
+        button: "Oh no, not again!!",
+    });
 }

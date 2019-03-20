@@ -8,8 +8,6 @@ spl_autoload_register(
             str_replace('\\', DIRECTORY_SEPARATOR, $className) .
             '.php';
 
-        if (isset($classFile) && file_exists($classFile)) {
-            require_once $classFile;
-        }
+        require_once $classFile;
     }
 );

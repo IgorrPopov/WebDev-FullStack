@@ -29,7 +29,12 @@
           (isset($_SESSION['logged_in_user']) ? 'chat_form.php' : 'login_form.php');
       ?>
     </div>
-    <script src="js/jquery-3.3.1.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/auth_script.js"></script>
     <script src="js/chat_script.js"></script>
   </body>

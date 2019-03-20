@@ -1,4 +1,3 @@
-const PATH_TO_CHAT_HANDLER = '../app/handlers/handler_chat.php';
 const PATH_TO_FROWNING_FACE_EMOJI_FILE = 'emoji/frowning_face.png';
 const PATH_TO_SMILING_FACE_EMOJI_FILE = 'emoji/smiling_face.png';
 
@@ -20,67 +19,76 @@ $(() => {
 
     // downloading chat messages that already have been sent when the page is loading
     if ($chatForm.length) {
-        updateChatMessages(true);
+        updateChatMessages();
     }
 
 
+    // new message send logic
     $chatForm.on('submit', (event) => {
 
         event.preventDefault();
 
-        $.post(PATH_TO_CHAT_HANDLER, {
-            new_message: $chatInput.val(),
-            time: new Date().getTime()
-        }, (responseError) => {
-            if (responseError === 'exception') { // php gave us an exception
-                window.location = 'error_page.php';
-            } else if (responseError) { // check if message isn't valid
+        $.post(PATH_TO_AUTH_ROUTER, {
+            router: 'chat',
+            new_message: $chatInput.val()
+        }, (response) => {
+            response = JSON.parse(response);
+
+            if (response.status === 'success') {
+                $(`.${selectEmptyMessageClass}`).remove();
+                updateChatMessages(true);
+            } else if (response.exception) {
+                handleServerError(response.exception);
+            } else { // handler gave us some input errors
                 $(`.${selectEmptyMessageClass}`).remove();
                 $(`.${selectChatInputSubmitClass}`).after(
-                    `<p class="${selectEmptyMessageClass}">${responseError}</p>`
+                    `<p class="${selectEmptyMessageClass}">${response.invalid_message}</p>`
                 );
-            } else { // the message is valid
-                $(`.${selectEmptyMessageClass}`).remove();
-
-                updateChatMessages(true);
             }
 
             $chatInput.val('');
 
         }).fail((xhr, status, error) => { // ajax fail
-            handleAjaxError(status + ' ' + xhr.status + ' ' + error);
+            handleServerError(status + ' ' + xhr.status + ' ' + error);
         });
     });
 });
 
-function updateChatMessages(scrollDown = false) {
+function updateChatMessages(newMessage = false) {
 
-    $.post(PATH_TO_CHAT_HANDLER, {
+    $.post(PATH_TO_AUTH_ROUTER, {
+        router: 'chat',
         load_chat: 'load_chat'
     }, (response) => {
-        if (response === 'exception') { // php gave us an exception
-            window.location = 'error_page.php';
-        } else if (response) {
-            response = JSON.parse(response);
+        response = JSON.parse(response);
 
+        if (response.status === 'success' && response.messages) {
             let updatedMessages = '';
-            for (let timeKey in response) {
-                updatedMessages += getOneLineMessage(response, timeKey);
+
+            for (let timeKey in response.messages) {
+                updatedMessages += getOneLineMessage(response.messages, timeKey);
             }
 
             $(`.${selectChatTextareaClass}`).html(updatedMessages);
 
-            if (scrollDown) { // scroll chat textarea to the bottom in case of new msg
+
+            // scroll chat textarea to the bottom in case of a new msg
+            if (newMessage) {
                 const chatTextarea =
                     document.getElementsByClassName(selectChatTextareaClass)[0];
                 chatTextarea.scrollTop = chatTextarea.scrollHeight;
             }
+        } else if (response.exception) { // backend trow an exception
+            handleServerError(response.exception);
         }
 
-        setTimeout(updateChatMessages, MILLISECONDS_IN_SECOND);
+
+        if (!newMessage && !response.exception) { // if exception stop update the chat
+            setTimeout(updateChatMessages, MILLISECONDS_IN_SECOND);
+        }
 
     }).fail((xhr, status, error) => { // ajax fail
-        handleAjaxError(status + ' ' + xhr.status + ' ' + error);
+        handleServerError(status + ' ' + xhr.status + ' ' + error);
     });
 }
 
@@ -101,12 +109,12 @@ const getTime = (date) =>
 const timePart = (input) =>
     input <= 9 ? `0${input}` : input; // add zero if we have one digit
 
-
 function addEmojiToMessage(message) {
     while (message.includes(SMILING_FACE_EMOJI) || message.includes(FROWNING_FACE_EMOJI)) {
         message = message.replace(
             SMILING_FACE_EMOJI, getEmoji(PATH_TO_SMILING_FACE_EMOJI_FILE)
         );
+
         message = message.replace(FROWNING_FACE_EMOJI, getEmoji());
     }
 
@@ -115,8 +123,3 @@ function addEmojiToMessage(message) {
 
 const getEmoji = (path = PATH_TO_FROWNING_FACE_EMOJI_FILE) =>
     `<img class="emoji" src="${path}" alt="emoji">`;
-
-function handleAjaxError(errorMsg) {
-    localStorage.setItem('ajax_error', errorMsg.toLowerCase());
-    window.location = 'error_page.php';
-}

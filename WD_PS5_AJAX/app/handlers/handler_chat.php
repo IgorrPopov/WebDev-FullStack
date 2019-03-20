@@ -1,84 +1,82 @@
 <?php
-session_start();
 
-require_once
+use app\modules\InputValidator as InputValidator;
+use app\modules\DatabaseHandler as DatabaseHandler;
+
+$config =
+    require_once
     dirname(__DIR__) .
     DIRECTORY_SEPARATOR .
     'config' .
     DIRECTORY_SEPARATOR .
     'config.php';
 
-require_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'modules_loader' .
-    DIRECTORY_SEPARATOR .
-    'modules_loader.php';
+require_once $config['pathToModulesLoader'];
 
 if (isset($_POST['new_message']) && isset($_SESSION['logged_in_user'])) {
+    $validator = new InputValidator();
 
-    $newMessage = app\modules\InputValidator::validateInput($_POST['new_message']);
+    $newMessage = $validator->validateInput($_POST['new_message']);
 
-    if (mb_strlen($newMessage) === 0) {
+    $response = []; // we will send this array to the front as json
 
-        echo 'Type something!';
+    if ($error = $validator->validateMassage($newMessage, $config['maxMessageLength'])) {
+        $response['invalid_message'] = $error;
+        $response['status'] = 'fail';
+        echo json_encode($response);
+        die();
+    }
 
-    } elseif (mb_strlen($newMessage) > MAX_MESSAGE_LENGTH) {
-
-        echo 'Maximum message length is ' . MAX_MESSAGE_LENGTH . ' characters!';
-
-    } else {
-
-        $time = app\modules\InputValidator::validateInput($_POST['time']);
+    if (empty($response)) {
+        $time = strval(round(microtime(true) * $config['microsecondsInMillisecond']));
         $name = $_SESSION['logged_in_user'];
 
         try {
-            $databaseHandler = new \app\modules\DatabaseHandler(
-                PATH_TO_JSON_CHAT_FILE
-            );
-
+            $databaseHandler = new DatabaseHandler($config['pathToJsonChatFile']);
             $database = $databaseHandler->getDatabase();
-            $database[$time] = array(
-                'name' => $name,
-                'message' => $newMessage
-            );
-
+            $database[$time] = ['name' => $name, 'message' => $newMessage];
             $databaseHandler->writeToDatabase($database);
         } catch (Exception $exception) {
-            $_SESSION['error'] = $exception->getMessage();
-            echo 'exception';
-            die();
+            $response['exception'] = $exception->getMessage();
         }
-
-        echo ''; // now errors was find
     }
+
+    if (empty($response)) {
+        $response['status'] = 'success';
+    } else {
+        $response['status'] = 'fail';
+    }
+
+    echo json_encode($response);
 }
 
 if (isset($_POST['load_chat'])) {
+    $response = [];
 
     try {
-        $databaseHandler = new \app\modules\DatabaseHandler(
-            PATH_TO_JSON_CHAT_FILE
-        );
-
+        $databaseHandler = new DatabaseHandler($config['pathToJsonChatFile']);
         $database = $databaseHandler->getDatabase();
     } catch (Exception $exception) {
-        $_SESSION['error'] = $exception->getMessage();
-        echo 'exception';
+        $response['exception'] = $exception->getMessage();
+        $response['status'] = 'fail';
+        echo json_encode($response);
         die();
     }
 
     if ($database) {
-        // get current time in milliseconds
-        $currentTime = round(microtime(true) * 1000);
         $messagesForLastHour = [];
+        $currentTime = round(microtime(true) * $config['microsecondsInMillisecond']);
 
         foreach ($database as $time => $nameAndMessage) { // an hour has passed or not
-            if (($currentTime - (float)$time) <= MILLISECONDS_IN_HOUR) {
+            if (($currentTime - $time) <= $config['millisecondsInHour']) {
                 $messagesForLastHour[$time] = $nameAndMessage;
             }
         }
 
-        echo json_encode($messagesForLastHour);
+        $response['messages'] = $messagesForLastHour;
     }
+
+    $response['status'] = 'success';
+
+    echo json_encode($response);
 }

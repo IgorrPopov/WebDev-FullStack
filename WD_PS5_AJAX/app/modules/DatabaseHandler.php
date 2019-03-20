@@ -8,16 +8,16 @@ class DatabaseHandler
     public function __construct($pathToFile)
     {
         $this->pathToFile = $pathToFile;
-        JsonFileChecker::validateDatabase($this->pathToFile);
+        (new JsonFileChecker)->validateDatabase($this->pathToFile);
     }
 
     public function getDatabase()
     {
-        return JsonFileReader::getJsonDatabase($this->pathToFile);
+        return (new JsonFileReader)->getJsonDatabase($this->pathToFile);
     }
 
     public function writeToDatabase($data)
     {
-        JsonFileWriter::writeJson($this->pathToFile, $data);
+        (new JsonFileWriter)->writeJson($this->pathToFile, $data);
     }
 }

@@ -3,17 +3,15 @@ namespace app\modules;
 
 class JsonFileChecker
 {
-    public static function validateDatabase($pathToFile)
+    public function validateDatabase($pathToFile)
     {
-        $validator = new self();
-
-        if (!$validator->validateJsonFileFolder($pathToFile)) {
+        if (!$this->validateJsonFileFolder($pathToFile)) {
             throw new \Exception(
                 'An error occurred "Cannot create database folder!"'
             );
         }
 
-        if (!$validator->validateJsonFile($pathToFile)) {
+        if (!$this->validateJsonFile($pathToFile)) {
             throw new \Exception(
                 'An error occurred "Database is corrupted!"'
             );
