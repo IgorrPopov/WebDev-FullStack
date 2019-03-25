@@ -21,16 +21,16 @@ if (isset($_POST['log_out']) && isset($_SESSION['logged_in_user'])) {
 if (isset($_POST['submit'])) { // try to log in
     $validator = new InputValidator();
 
-    $name = $validator->validateInput($_POST['name']);
-    $password = $validator->validateInput($_POST['password']);
+    $name = $_POST['name'];
+    $password = $_POST['password'];
 
     $response = []; // we will send this array to the front as json
 
-    if ($error = $validator->validateName($name, $config['maxPassOrNameLength'])) {
-        $response['name'] = $error;
+    if (!$validator->validateName($name, $config['maxPassOrNameLength'])) {
+        $response['name'] = $validator->getErrors()['name'];
     }
-    if ($error = $validator->validatePassword($password, $config['maxPassOrNameLength'])) {
-        $response['password'] = $error;
+    if (!$validator->validatePassword($password, $config['maxPassOrNameLength'])) {
+        $response['password'] = $validator->getErrors()['password'];
     }
 
     if (!empty($response)) {

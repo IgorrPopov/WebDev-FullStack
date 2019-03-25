@@ -5,9 +5,9 @@ return [
 
     'microsecondsInMillisecond' => 1000,
 
-    'maxPassOrNameLength' => 20,
+    'maxPassOrNameLength' => 25,
 
-    'maxMessageLength' => 120,
+    'maxMessageLength' => 500,
 
     'pathToJsonAuthFile' =>
         dirname(__DIR__, 2) .

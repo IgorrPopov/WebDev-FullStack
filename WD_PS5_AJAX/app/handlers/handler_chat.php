@@ -16,29 +16,26 @@ require_once $config['pathToModulesLoader'];
 if (isset($_POST['new_message']) && isset($_SESSION['logged_in_user'])) {
     $validator = new InputValidator();
 
-    $newMessage = $validator->validateInput($_POST['new_message']);
-
     $response = []; // we will send this array to the front as json
 
-    if ($error = $validator->validateMassage($newMessage, $config['maxMessageLength'])) {
-        $response['invalid_message'] = $error;
+    if (!$validator->validateMassage($_POST['new_message'], $config['maxMessageLength'])) {
+        $response['invalid_message'] = $validator->getErrors()['invalid_message'];
         $response['status'] = 'fail';
         echo json_encode($response);
         die();
     }
 
-    if (empty($response)) {
-        $time = strval(round(microtime(true) * $config['microsecondsInMillisecond']));
-        $name = $_SESSION['logged_in_user'];
+    $newMessage = $validator->getValidMessage();
+    $time = strval(round(microtime(true) * $config['microsecondsInMillisecond']));
+    $name = $_SESSION['logged_in_user'];
 
-        try {
-            $databaseHandler = new DatabaseHandler($config['pathToJsonChatFile']);
-            $database = $databaseHandler->getDatabase();
-            $database[$time] = ['name' => $name, 'message' => $newMessage];
-            $databaseHandler->writeToDatabase($database);
-        } catch (Exception $exception) {
-            $response['exception'] = $exception->getMessage();
-        }
+    try {
+        $databaseHandler = new DatabaseHandler($config['pathToJsonChatFile']);
+        $database = $databaseHandler->getDatabase();
+        $database[$time] = ['name' => $name, 'message' => $newMessage];
+        $databaseHandler->writeToDatabase($database);
+    } catch (Exception $exception) {
+        $response['exception'] = $exception->getMessage();
     }
 
     if (empty($response)) {

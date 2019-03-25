@@ -3,47 +3,70 @@ namespace app\modules;
 
 class InputValidator
 {
+    private $errors = [];
+    private $validMessage;
+
     public function validateName($name, $condition)
     {
         if (!mb_strlen($name)) {
-            return 'Enter name!';
-        } elseif (preg_match('/[^a-zA-Z0-9-_]/', $name)) {
-            return 'Only Latin letters, numbers, "-" or "_"';
-        } elseif (mb_strlen($name) > $condition) {
-            return 'Max name size is ' . $condition;
+            $this->errors['name'] = 'Enter name!';
+            return false;
+        }
+        if (preg_match('/[^a-zA-Z0-9-_]/', $name)) {
+            $this->errors['name'] = 'Only Latin letters, numbers, "-" or "_"';
+            return false;
+        }
+        if (mb_strlen($name) > $condition) {
+            $this->errors['name'] = 'Max name size is ' . $condition;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public function validatePassword($password, $condition)
     {
         if (!mb_strlen($password)) {
-            return 'Enter password!';
-        } elseif (preg_match('/[^a-zA-Z0-9-_]/', $password)) {
-            return 'Only Latin letters, numbers, "-" or "_"';
-        } elseif (mb_strlen($password) > $condition) {
-            return 'Max password size is ' . $condition;
+            $this->errors['password'] = 'Enter password!';
+            return false;
+        }
+        if (preg_match('/[^a-zA-Z0-9-_]/', $password)) {
+            $this->errors['password'] = 'Only Latin letters, numbers, "-" or "_"';
+            return false;
+        }
+        if (mb_strlen($password) > $condition) {
+            $this->errors['password'] = 'Max password size is ' . $condition;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     public function validateMassage($newMessage, $condition)
     {
+        $newMessage = htmlspecialchars(stripslashes(trim($newMessage)));
+
         if (!mb_strlen($newMessage)) {
-            return 'Type something!';
-        } elseif (mb_strlen($newMessage) > $condition) {
-            return 'Maximum message length is ' . $condition . ' characters!';
+            $this->errors['invalid_message'] = 'Type something!';
+            return false;
+        }
+        if (mb_strlen($newMessage) > $condition) {
+            $this->errors['invalid_message'] = 'Maximum message length is ' . $condition . ' characters!';
+            return false;
         }
 
-        return false;
+        $this->validMessage = $newMessage;
+
+        return true;
     }
 
-    public function validateInput($input)
+    public function getValidMessage()
     {
-        $input = trim($input);
-        $input = stripslashes($input);
-        return htmlspecialchars($input);
+        return $this->validMessage;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
     }
 }
