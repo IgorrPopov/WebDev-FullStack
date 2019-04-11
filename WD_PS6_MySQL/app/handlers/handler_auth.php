@@ -1,23 +1,8 @@
 <?php
 
 use app\modules\InputValidator;
-
-$config =
-    require_once
-    dirname(__DIR__) .
-    DIRECTORY_SEPARATOR .
-    'config' .
-    DIRECTORY_SEPARATOR .
-    'config.php';
-
-require_once $config['pathToModulesLoader'];
-
-if (isset($_POST['log_out']) && isset($_SESSION['logged_in_user'])) {
-    unset($_SESSION['logged_in_user']);
-    unset($_SESSION['welcome_message']);
-
-    $connection = null;
-}
+use app\modules\MySqlDatabaseHandler;
+use app\modules\ChatDatabaseHandler;
 
 if (isset($_POST['submit'])) { // try to log in
     $validator = new InputValidator();
@@ -25,53 +10,36 @@ if (isset($_POST['submit'])) { // try to log in
     $name = $_POST['name'];
     $password = $_POST['password'];
 
+    $validator->validateName($name, $config['maxPassOrNameLength']);
+    $validator->validatePassword($password, $config['maxPassOrNameLength']);
 
-    if (!$validator->validateName($name, $config['maxPassOrNameLength'])) {
-        $response['name'] = $validator->getErrors()['name'];
-    }
-    if (!$validator->validatePassword($password, $config['maxPassOrNameLength'])) {
-        $response['password'] = $validator->getErrors()['password'];
-    }
-
-
-    if (!empty($response)) {
-        $response['status'] = 'fail';
-        $connection = null;
-        echo json_encode($response);
-        die();
+    // if name or password invalid send response and stop script
+    if (!empty($validator->getErrors())) {
+        $response->send($validator->getErrors());
     }
 
+    // both input fields are valid, check user
+    try {
+        $db = new ChatDatabaseHandler(new MySqlDatabaseHandler());
 
-    try { // both fields are valid, check user password
-        $sql = "SELECT password FROM users WHERE name='$name'";
-        $statement = $connection->prepare($sql);
-        $statement->execute();
-
-        $hashedPasswordFromDb = $statement->fetch(PDO::FETCH_ASSOC)['password'];
-        // add a new user
-        if (!$hashedPasswordFromDb) {
-            $newHashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO users(name, password) VALUES('$name', '$newHashedPassword')";
-            $connection->exec($sql);
+        if (!$db->isUserExist($name)) {
+            $db->addUser($name, $password);
+        } elseif (!$db->isPasswordMatch($name, $password)) {
+            $response->send(['password' => 'Wrong password!']);
         }
-        // old user with wrong password
-        if ($hashedPasswordFromDb && !password_verify($password, $hashedPasswordFromDb)) {
-            $response['password'] = 'Wrong password!';
-        }
+
     } catch (PDOException $exception) {
-        $response['exception'] = $exception->getMessage();
+        $response->send(['exception' => $exception->getMessage()]);
     }
 
 
-    if (empty($response)) { // no exception or wrong password
-        $_SESSION['logged_in_user'] = $name;
-        $response['status'] = 'success';
-    } else {
-        $response['status'] = 'fail';
-    }
+    $_SESSION['logged_in_user'] = $name;
+
+    $response->send(['status' => 'success']);
+}
 
 
-    $connection = null;
-
-    echo json_encode($response);
+if (isset($_POST['log_out']) && isset($_SESSION['logged_in_user'])) {
+    unset($_SESSION['logged_in_user']);
+    unset($_SESSION['welcome_message']);
 }

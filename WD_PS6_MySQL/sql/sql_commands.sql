@@ -1,8 +1,8 @@
-CREATE DATABASE easy_chat;
+CREATE DATABASE easy_chat COLLATE 'utf8mb4_unicode_ci';
 
 CREATE TABLE users (
   user_id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(25) NOT NULL,
+  name VARCHAR(25) NOT NULL COLLATE 'latin1_general_cs',
   password VARCHAR(255) NOT NULL
 );
 

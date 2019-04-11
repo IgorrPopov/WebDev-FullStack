@@ -34,7 +34,6 @@ $(() => {
             password: $(`.${selectLoginFormPasswordClass}`).val(),
             submit: 'submit'
         }, (response) => {
-            response = JSON.parse(response);
 
             if (response.status === 'success') {
                 location.reload();
@@ -45,7 +44,7 @@ $(() => {
                 addErrorsMessages(response);
             }
 
-        }).fail((xhr, status, error) => { // ajax fail
+        }, 'json').fail((xhr, status, error) => { // ajax fail
             handleServerError(status + ' ' + xhr.status + ' ' + error);
         });
     });

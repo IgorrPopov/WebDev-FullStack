@@ -1,7 +1,14 @@
 <?php
 session_start();
 
-if (isset($_POST['router']) && $_POST['router'] === 'auth' || $_POST['router'] === 'chat') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['router'])) {
+    header('Location: ../');
+    die();
+}
+
+$route = $_POST['router'];
+
+if ($route === 'auth' || $route === 'chat') {
 
     require_once
         dirname(__DIR__, 2) .
@@ -10,7 +17,7 @@ if (isset($_POST['router']) && $_POST['router'] === 'auth' || $_POST['router'] =
         DIRECTORY_SEPARATOR .
         'handlers' .
         DIRECTORY_SEPARATOR .
-        'handler_database.php';
+        'handlers_header.php';
 
     require_once
         dirname(__DIR__, 2) .
@@ -19,5 +26,8 @@ if (isset($_POST['router']) && $_POST['router'] === 'auth' || $_POST['router'] =
         DIRECTORY_SEPARATOR .
         'handlers' .
         DIRECTORY_SEPARATOR .
-        (($_POST['router'] === 'auth') ? 'handler_auth.php' : 'handler_chat.php');
+        (($route === 'auth') ? 'handler_auth.php' : 'handler_chat.php');
+
+} else { // in case if user change 'router' value for some reason
+    header('Location: ../');
 }

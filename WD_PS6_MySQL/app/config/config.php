@@ -1,10 +1,6 @@
 <?php
 
 return [
-    'millisecondsInHour' => 3600000,
-
-    'microsecondsInMillisecond' => 1000,
-
     'maxPassOrNameLength' => 25,
 
     'maxMessageLength' => 500,

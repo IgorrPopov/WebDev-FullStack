@@ -3,8 +3,8 @@ const PATH_TO_SMILING_FACE_EMOJI_FILE = 'emoji/smiling_face.png';
 
 const MILLISECONDS_IN_SECOND = 1000;
 
-const FROWNING_FACE_EMOJI = ':(';
-const SMILING_FACE_EMOJI = ':)';
+const MATCH_FROWNING_FACE_EMOJI = /:\(/g;
+const MATCH_SMILING_FACE_EMOJI = /:\)/g;
 
 const selectChatInputTextClass = 'chat__input-text';
 const selectFormChatClass = 'chat__form';
@@ -30,9 +30,8 @@ $(() => {
 
         $.post(PATH_TO_AUTH_ROUTER, {
             router: 'chat',
-            new_message: $chatInput.val()
+            new_message: $chatInput.val(),
         }, (response) => {
-            response = JSON.parse(response);
 
             if (response.status === 'success') {
                 $(`.${selectEmptyMessageClass}`).remove();
@@ -43,13 +42,13 @@ $(() => {
             } else { // handler gave us some input errors
                 $(`.${selectEmptyMessageClass}`).remove();
                 $(`.${selectChatInputSubmitClass}`).after(
-                    `<p class="${selectEmptyMessageClass}">${response.invalid_message}</p>`
+                    `<p class="${selectEmptyMessageClass}">${response.invalid_msg}</p>`
                 );
             }
 
             $chatInput.val('');
 
-        }).fail((xhr, status, error) => { // ajax fail
+        }, 'json').fail((xhr, status, error) => { // ajax fail
             handleServerError(status + ' ' + xhr.status + ' ' + error);
         });
     });
@@ -61,23 +60,17 @@ function updateChatMessages(newMessage = false) {
         router: 'chat',
         load_chat: 'load_chat'
     }, (response) => {
-        response = JSON.parse(response);
 
         if (response.status === 'success' && response.messages) {
+            const $chatTextarea = $(`.${selectChatTextareaClass}`);
+
             let updatedMessages = '';
-
-            for (let index in response.messages) {
-                updatedMessages += getOneLineMessage(response.messages[index]);
-            }
-
-            $(`.${selectChatTextareaClass}`).html(updatedMessages);
-
+            response.messages.forEach(msgObj => updatedMessages += getOneLineMessage(msgObj));
+            $chatTextarea.html(updatedMessages);
 
             // scroll chat textarea to the bottom in case of a new msg
             if (newMessage) {
-                const chatTextarea =
-                    document.getElementsByClassName(selectChatTextareaClass)[0];
-                chatTextarea.scrollTop = chatTextarea.scrollHeight;
+                $chatTextarea.scrollTop($chatTextarea[0].scrollHeight);
             }
         } else if (response.exception) { // backend trow an exception
             handleServerError(response.exception);
@@ -88,7 +81,7 @@ function updateChatMessages(newMessage = false) {
             setTimeout(updateChatMessages, MILLISECONDS_IN_SECOND);
         }
 
-    }).fail((xhr, status, error) => { // ajax fail
+    }, 'json').fail((xhr, status, error) => { // ajax fail
         handleServerError(status + ' ' + xhr.status + ' ' + error);
     });
 }
@@ -97,30 +90,18 @@ const getOneLineMessage = (messageObj) =>
     `<div>
         ${getTime(new Date(messageObj.time))}
         <b>${messageObj.name}:</b>
-        ${addEmojiToMessage(messageObj.message)}
+        ${messageObj.message
+            .replace(MATCH_FROWNING_FACE_EMOJI, getEmoji())
+            .replace(MATCH_SMILING_FACE_EMOJI, getEmoji(PATH_TO_SMILING_FACE_EMOJI_FILE))
+         }
     </div>`;
 
 const getTime = (date) =>
     '[' +
-        timePart(date.getHours()) + ':' +
-        timePart(date.getMinutes()) + ':' +
-        timePart(date.getSeconds()) +
+        date.getHours().toString().padStart(2, '0') + ':' +
+        date.getMinutes().toString().padStart(2, '0') + ':' +
+        date.getSeconds().toString().padStart(2, '0') +
     '] ';
-
-const timePart = (input) =>
-    input <= 9 ? `0${input}` : input; // add zero if we have one digit
-
-function addEmojiToMessage(message) {
-    while (message.includes(SMILING_FACE_EMOJI) || message.includes(FROWNING_FACE_EMOJI)) {
-        message = message.replace(
-            SMILING_FACE_EMOJI, getEmoji(PATH_TO_SMILING_FACE_EMOJI_FILE)
-        );
-
-        message = message.replace(FROWNING_FACE_EMOJI, getEmoji());
-    }
-
-    return message;
-}
 
 const getEmoji = (path = PATH_TO_FROWNING_FACE_EMOJI_FILE) =>
     `<img class="emoji" src="${path}" alt="emoji">`;

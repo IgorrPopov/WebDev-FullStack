@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2019 at 02:03 PM
+-- Generation Time: Apr 11, 2019 at 11:52 AM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -32,8 +32,8 @@ CREATE TABLE `messages` (
   `message_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `message` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -43,9 +43,9 @@ CREATE TABLE `messages` (
 
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
-  `name` varchar(25) NOT NULL,
-  `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `name` varchar(25) CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables

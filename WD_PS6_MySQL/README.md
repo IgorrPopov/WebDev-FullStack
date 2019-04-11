@@ -1,5 +1,6 @@
 - require PHP version 7.2.9
 - tested on ApacheFriends XAMPP Version 7.2.9 with MariaDB version 10.1.35
+- required collations utf8mb4_unicode_ci and latin1_general_cs
 
 **To successfully launch the program you need:**
 - create a database and name it "easy_chat" (collation utf8mb4_unicode_ci);

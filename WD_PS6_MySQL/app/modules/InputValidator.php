@@ -47,11 +47,11 @@ class InputValidator
         $newMessage = htmlspecialchars(stripslashes(trim($newMessage)));
 
         if (!mb_strlen($newMessage)) {
-            $this->errors['invalid_message'] = 'Type something!';
+            $this->errors['invalid_msg'] = 'Type something!';
             return false;
         }
         if (mb_strlen($newMessage) > $condition) {
-            $this->errors['invalid_message'] = 'Maximum message length is ' . $condition . ' characters!';
+            $this->errors['invalid_msg'] = 'Maximum message length is ' . $condition . ' characters!';
             return false;
         }
 
