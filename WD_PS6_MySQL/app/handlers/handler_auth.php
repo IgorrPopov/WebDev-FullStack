@@ -1,8 +1,7 @@
 <?php
 
 use app\modules\InputValidator;
-use app\modules\MySqlDatabaseHandler;
-use app\modules\ChatDatabaseHandler;
+use app\modules\ChatMySqlDatabaseHandler;
 
 if (isset($_POST['submit'])) { // try to log in
     $validator = new InputValidator();
@@ -20,7 +19,7 @@ if (isset($_POST['submit'])) { // try to log in
 
     // both input fields are valid, check user
     try {
-        $db = new ChatDatabaseHandler(new MySqlDatabaseHandler());
+        $db = new ChatMySqlDatabaseHandler();
 
         if (!$db->isUserExist($name)) {
             $db->addUser($name, $password);

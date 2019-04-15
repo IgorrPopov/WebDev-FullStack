@@ -3,7 +3,7 @@ namespace app\modules;
 
 use PDO;
 
-class MySqlDatabaseHandler implements DatabaseHandler
+class ChatMySqlDatabaseHandler implements DatabaseHandler
 {
     public function isUserExist($name)
     {

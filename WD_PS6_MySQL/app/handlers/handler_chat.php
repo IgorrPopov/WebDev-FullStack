@@ -1,8 +1,7 @@
 <?php
 
 use app\modules\InputValidator;
-use app\modules\MySqlDatabaseHandler;
-use app\modules\ChatDatabaseHandler;
+use app\modules\ChatMySqlDatabaseHandler;
 
 if (isset($_POST['new_message']) && isset($_SESSION['logged_in_user'])) {
     $validator = new InputValidator();
@@ -17,7 +16,7 @@ if (isset($_POST['new_message']) && isset($_SESSION['logged_in_user'])) {
     $name = $_SESSION['logged_in_user'];
 
     try {
-        $db = new ChatDatabaseHandler(new MySqlDatabaseHandler());
+        $db = new ChatMySqlDatabaseHandler();
         $db->addMessage($name, $newMessage);
     } catch (PDOException $exception) {
         $response->send(['exception' => $exception->getMessage()]);
@@ -30,7 +29,7 @@ if (isset($_POST['new_message']) && isset($_SESSION['logged_in_user'])) {
 if (isset($_POST['load_chat']) && isset($_SESSION['logged_in_user'])) {
 
     try {
-        $db = new ChatDatabaseHandler(new MySqlDatabaseHandler());
+        $db = new ChatMySqlDatabaseHandler();
         $messagesForLastHour = $db->getMessagesForLastHour();
     } catch (PDOException $exception) {
         $response->send(['exception' => $exception->getMessage()]);

@@ -1,33 +1,30 @@
 <?php
 session_start();
 
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['router'])) {
-    header('Location: ../');
+    http_response_code(404);
     die();
 }
+
 
 $route = $_POST['router'];
 
 if ($route === 'auth' || $route === 'chat') {
 
-    require_once
+    $config = require_once
         dirname(__DIR__, 2) .
         DIRECTORY_SEPARATOR .
         'app' .
         DIRECTORY_SEPARATOR .
-        'handlers' .
+        'config' .
         DIRECTORY_SEPARATOR .
-        'handlers_header.php';
+        'config.php';
 
-    require_once
-        dirname(__DIR__, 2) .
-        DIRECTORY_SEPARATOR .
-        'app' .
-        DIRECTORY_SEPARATOR .
-        'handlers' .
-        DIRECTORY_SEPARATOR .
-        (($route === 'auth') ? 'handler_auth.php' : 'handler_chat.php');
+    require_once $config['pathToHandlersHeader'];
+
+    require_once $config[($route === 'auth') ? 'pathToHandlerAuth' : 'pathToHandlerChat'];
 
 } else { // in case if user change 'router' value for some reason
-    header('Location: ../');
+    http_response_code(404);
 }

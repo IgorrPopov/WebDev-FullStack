@@ -1,4 +1,15 @@
-<?php session_start() ?>
+<?php
+session_start();
+
+$config = require_once
+    dirname(__DIR__) .
+    DIRECTORY_SEPARATOR .
+    'app' .
+    DIRECTORY_SEPARATOR .
+    'config' .
+    DIRECTORY_SEPARATOR .
+    'config.php';
+?>
 
 <!doctype html>
 <html lang="en">
@@ -19,14 +30,8 @@
     </header>
     <div class="chat-wrapper">
       <?php
-      require_once
-          dirname(__DIR__) .
-          DIRECTORY_SEPARATOR .
-          'app' .
-          DIRECTORY_SEPARATOR .
-          'templates' .
-          DIRECTORY_SEPARATOR .
-          (isset($_SESSION['logged_in_user']) ? 'chat_form.php' : 'login_form.php');
+      require_once isset($_SESSION['logged_in_user']) ?
+          $config['pathToChatTemplate'] : $config['pathToLoginTemplate'];
       ?>
     </div>
     <script
