@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style/style.css" type="text/css">
+  <title>Form validation</title>
+</head>
+<body>
+<form method="post" class="form">
+  <div class="form__row">
+    <label for="ip">IP:</label>
+    <input type="text" id="ip" name="ip" placeholder="255.255.255.255">
+    <div class="form__js-flag form__js-flag--ip">js</div>
+    <div class="form__php-flag form__php-flag--ip">php</div>
+  </div>
+  <div class="form__row">
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" placeholder="(with protocol) https://en.wikipedia.org">
+    <div class="form__js-flag form__js-flag--url">js</div>
+    <div class="form__php-flag form__php-flag--url">php</div>
+  </div>
+  <div class="form__row">
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" placeholder="some_email@protonmail.com">
+    <div class="form__js-flag form__js-flag--email">js</div>
+    <div class="form__php-flag form__php-flag--email">php</div>
+  </div>
+  <div class="form__row">
+    <label for="date">Date:</label>
+    <input type="text" id="date" name="date" placeholder="mm/dd/yyyy">
+    <div class="form__js-flag form__js-flag--date">js</div>
+    <div class="form__php-flag form__php-flag--date">php</div>
+  </div>
+  <div class="form__row">
+    <label for="time">Time:</label>
+    <input type="text" id="time" name="time" placeholder="hh:mm:ss">
+    <div class="form__js-flag form__js-flag--time">js</div>
+    <div class="form__php-flag form__php-flag--time">php</div>
+  </div>
+  <div class="form__row">
+    <input type="submit" value="PHP">
+  </div>
+</form>
+<script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous">
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

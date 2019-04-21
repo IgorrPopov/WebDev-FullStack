@@ -1,0 +1,69 @@
+body {
+  background-color: #f7f1e3;
+}
+
+.highlighter {
+  display: flex;
+  flex-wrap: wrap;
+  width: 45%;
+  max-width: 600px;
+  min-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.highlighter__form {
+  width: 100%;
+}
+
+.highlighter__textarea {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  font-size: large;
+  resize: none;
+  margin-bottom: 15px;
+  outline: none;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+.highlighter__regex-input {
+  width: 60%;
+  position: relative;
+  font-size: large;
+  height: 40px;
+  margin-right: 15px;
+  outline: none;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+.highlighter__output {
+  font-size: large;
+  margin-top: 10px;
+}
+
+input[type="submit"], input[type="button"] {
+  font-weight: bold;
+  font-size: 1.5em;
+  outline: none;
+  height: 40px;
+  cursor: pointer;
+  vertical-align: top;
+}
+
+/* Error */
+
+.highlighter__error-message {
+  position: absolute;
+  color: red;
+  font-size: medium;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.highlighter__error-message:nth-child(2) {
+  margin-top: -19px;
+}

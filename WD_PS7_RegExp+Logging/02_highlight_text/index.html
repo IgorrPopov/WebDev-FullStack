@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style/style.css" type="text/css">
+  <title>Highlighter</title>
+</head>
+<body>
+  <a href="https://www.debuggex.com/cheatsheet/regex/javascript" target="_blank">
+    Regex Cheatsheet
+  </a>
+  <div class="highlighter">
+    <form class="highlighter__form">
+      <textarea class="highlighter__textarea" cols="30" rows="10" placeholder="Write something here ..."></textarea>
+      <input type="text" class="highlighter__regex-input" placeholder="/\w{7}/g">
+      <input type="submit" value="Go">
+      <input type="button" class="highlighter__lorem" value="Lorem">
+    </form>
+    <output class="highlighter__output"></output>
+  </div>
+  <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous">
+  </script>
+  <script src="js/script.js"></script>
+</body>
+</html>
