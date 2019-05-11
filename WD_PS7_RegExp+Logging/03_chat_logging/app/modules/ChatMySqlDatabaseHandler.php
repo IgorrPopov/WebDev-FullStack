@@ -5,6 +5,8 @@ use PDO;
 
 class ChatMySqlDatabaseHandler implements DatabaseHandler
 {
+    private static $firstMsgForLastHour;
+
     public function isUserExist($name)
     {
         $sql = 'SELECT name FROM users WHERE name=:name';
@@ -51,11 +53,11 @@ class ChatMySqlDatabaseHandler implements DatabaseHandler
 
     public function getMessagesForLastHour()
     {
-        $sql = "SELECT messages.time, messages.message, users.name
+        $sql = 'SELECT messages.time, messages.message, users.name
                 FROM messages
                 LEFT JOIN users
                 ON messages.user_id=users.user_id
-                WHERE messages.time > NOW() - INTERVAL 1 HOUR";
+                WHERE messages.time > NOW() - INTERVAL 1 HOUR';
         $stm = DatabaseConnection::getConnection()->prepare($sql);
         $stm->execute();
 

@@ -18,7 +18,7 @@ $(() => {
        $(`.${selectHighlighterErrorMessageClass}`).remove();
        $output.html('');
 
-       let inputText = $textarea.val();
+       const inputText = htmlSpecialChars($textarea.val());
        const inputRegExString = $regExInput.val();
 
        if(!inputText.length) {
@@ -64,3 +64,10 @@ function createRegEx(inputRegExString) {
 
 const addErrorMsg = ($elemnt, message) =>
     $elemnt.after(`<p class="${selectHighlighterErrorMessageClass}">${message}</p>`);
+
+const htmlSpecialChars = text => text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');

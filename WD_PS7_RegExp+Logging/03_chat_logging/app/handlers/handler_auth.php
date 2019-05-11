@@ -52,9 +52,13 @@ if (isset($_POST['submit'])) { // try to log in
 if (isset($_POST['log_out']) && isset($_SESSION['logged_in_user'])) {
     $log->setLog('info', 'user logged out','log out from the chat', $_SESSION['logged_in_user_id']);
 
-    unset($_SESSION['logged_in_user']);
-    unset($_SESSION['logged_in_user_id']);
-    unset($_SESSION['welcome_message']);
+    unset(
+        $_SESSION['logged_in_user'],
+        $_SESSION['logged_in_user_id'],
+        $_SESSION['welcome_message'],
+        $_SESSION['first_message_for_last_hour'],
+        $_SESSION['messages_amount']
+    );
 
     $response->send(['status' => 'success', 'log' => $log->getLog()]);
 }

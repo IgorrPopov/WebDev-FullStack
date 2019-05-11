@@ -1,7 +1,8 @@
 <?php
 
-foreach ($_POST as $input => $value) {
-    $_POST[$input] = (preg_match($config['inputs_regex'][$input], $value)) ? 'pass' : 'fail';
-}
+use app\module\Validator;
 
-echo json_encode($_POST);
+require_once $config['pathToFormValidator'];
+
+
+echo json_encode((new Validator())->validateForm($_POST));

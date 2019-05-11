@@ -23,7 +23,7 @@ $(() => {
 
     // downloading chat messages that already have been sent when the page is loading
     if ($chatForm.length) {
-        updateChatMessages();
+        updateChatMessages('first_launch');
     }
 
 
@@ -32,6 +32,8 @@ $(() => {
 
         event.preventDefault();
 
+        const service = 'send a new message';
+
         $.post(PATH_TO_AUTH_ROUTER, {
             router: 'chat',
             new_message: $chatInput.val(),
@@ -39,19 +41,19 @@ $(() => {
 
             if (response.status === 'success') {
                 const logMsg = 'the new message successfully sent to the server';
-                printLog(new Logger('info', logMsg, 'send a new message', response.log));
+                printLog(new Logger('info', logMsg, service, response.log));
 
                 $(`.${selectEmptyMessageClass}`).remove();
 
-                updateChatMessages(true);
+                updateChatMessages('new_message');
             } else if (response.exception) {
                 const logMsg = 'internal server error';
-                printLog(new Logger('error', logMsg, 'send a new message', response.log, '500'));
+                printLog(new Logger('error', logMsg, service, response.log, '500'));
 
                 handleServerError(response.exception);
             } else { // handler gave us some input errors
                 const logMsg = 'invalid user input message';
-                printLog(new Logger('warning', logMsg, 'send a new message', response.log));
+                printLog(new Logger('warning', logMsg, service, response.log));
 
                 $(`.${selectEmptyMessageClass}`).remove();
                 $(`.${selectChatInputSubmitClass}`).after(
@@ -63,18 +65,21 @@ $(() => {
 
         }, 'json').fail((xhr, status, error) => { // ajax fail
             const logMsg = 'server is not available';
-            printLog(new Logger('error', logMsg, 'send a new message', 'none', xhr.status));
+            printLog(new Logger('error', logMsg, service, 'none', xhr.status));
 
             handleServerError(status + ' ' + xhr.status + ' ' + error);
         });
     });
 });
 
-function updateChatMessages(newMessage = false) {
+function updateChatMessages(updateOption = 'not_new_message') {
+
+    const service = 'update chat messages';
 
     $.post(PATH_TO_AUTH_ROUTER, {
         router: 'chat',
-        load_chat: 'load_chat'
+        load_chat: 'load_chat',
+        update_option: updateOption
     }, (response) => {
 
         if (response.status === 'success' && response.messages) {
@@ -85,28 +90,29 @@ function updateChatMessages(newMessage = false) {
             $chatTextarea.html(updatedMessages);
 
             // scroll chat textarea to the bottom in case of a new msg
-            if (newMessage) {
+            if (updateOption === 'new_message') {
                 $chatTextarea.scrollTop($chatTextarea[0].scrollHeight);
             }
 
             const logMsg = "chat's messages for the last hour successfully updated";
-            printLog(new Logger('info', logMsg, 'update chat messages', response.log));
+            printLog(new Logger('info', logMsg, service, response.log));
 
         } else if (response.exception) { // backend trow an exception
             const logMsg = 'internal server error';
-            printLog(new Logger('error', logMsg, 'update chat messages', response.log, '500'));
+            printLog(new Logger('error', logMsg, service, response.log, '500'));
 
             handleServerError(response.exception);
         }
 
 
-        if (!newMessage && !response.exception) { // if exception stop update the chat
+        if (updateOption === 'not_new_message' || updateOption === 'first_launch'
+            && !response.exception) { // if exception stop update the chat
             setTimeout(updateChatMessages, MILLISECONDS_IN_SECOND);
         }
 
     }, 'json').fail((xhr, status, error) => { // ajax fail
         const logMsg = 'server is not available';
-        printLog(new Logger('error', logMsg, 'update chat messages', 'none', xhr.status));
+        printLog(new Logger('error', logMsg, service, 'none', xhr.status));
 
         handleServerError(status + ' ' + xhr.status + ' ' + error);
     });

@@ -32,6 +32,8 @@ $(() => {
 
         event.preventDefault();
 
+        const service = 'login to the chat';
+
         const name = $(`.${selectLoginFormNameClass}`).val();
         const password = $(`.${selectLoginFormPasswordClass}`).val();
 
@@ -46,12 +48,12 @@ $(() => {
                 location.reload();
             } else if (response.exception) { // backend trow an exception
                 const logMsg = 'internal server error';
-                printLog(new Logger('error', logMsg, 'login to the chat', response.log, '500'));
+                printLog(new Logger('error', logMsg, service, response.log, '500'));
 
                 handleServerError(response.exception);
             } else { // handler gave us some input errors
                 const logMsg = `invalid user input (name: "${name}" password: "${password}")`;
-                printLog(new Logger('warning', logMsg, 'login to the chat', response.log));
+                printLog(new Logger('warning', logMsg, service, response.log));
 
                 highlightInputErrors(response);
                 addErrorsMessages(response);
@@ -59,7 +61,7 @@ $(() => {
 
         }, 'json').fail((xhr, status, error) => { // ajax fail
             const logMsg = 'server is not available';
-            printLog(new Logger('error', logMsg, 'login to the chat', 'none', xhr.status));
+            printLog(new Logger('error', logMsg, service, 'none', xhr.status));
 
             handleServerError(status + ' ' + xhr.status + ' ' + error);
         });
