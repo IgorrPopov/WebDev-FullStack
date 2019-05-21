@@ -1,0 +1,414 @@
+@font-face {
+  font-family: "Black Jack";
+  src: url("../fonts/BLACKJAR.TTF");
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Header */
+
+.header {
+  background: url("../mockups/blue-pattern.jpg");
+  height: 651px;
+  display: flex;
+  justify-content: center;
+}
+
+.header__wrapper {
+  background: url("../mockups/iphone.png") no-repeat left 276px bottom -214px;
+  height: 651px;
+  width: 1402px;
+}
+
+.header__top-part {
+  display: flex;
+  align-items: center;
+}
+
+.header__square-logo {
+  display: inline-block;
+  background-color: #FFFFFF;
+  color: #02AAE8;
+  height: 100px;
+  width: 100px;
+  margin-left: 205px;
+  font-family: 'Kaushan Script', cursive;
+  text-align: center;
+  font-size: 50px;
+  box-shadow: 0 4px #01abe8, 14px 15px #01b1ea;
+}
+
+.menu-icon {
+  display: inline-block;
+  width: 34px;
+  height: 24px;
+  margin-left: 807px;
+  cursor: pointer;
+}
+
+.menu-icon__line {
+  margin: 2px;
+  width: 31px;
+  height: 4px;
+  background-color: #FFFFFF;
+  border-radius: 2px;
+}
+
+.header__bottom-part {
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.header__bottom-part h1 {
+  font-family: "Black Jack", sans-serif;
+  font-weight: 100;
+  font-size: 72px;
+  padding-top: 5px;
+  padding-right: 193px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.header__bottom-part p {
+  font-family: "Montserrat", sans-serif;
+  font-size: 34px;
+  margin-top: 15px;
+  padding-right: 192px;
+}
+
+.header__download-btn {
+  margin-right: 204px;
+  margin-top: 14px;
+  font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  border: 2px solid #FFFFFF;
+  border-radius: 2px;
+  background: transparent;
+  color: #FFFFFF;
+  padding: 18px 28px;
+  cursor: pointer;
+}
+
+.fa-cloud-download-alt {
+  padding-left: 9px;
+}
+
+/* Longwinded Header */
+
+.longwinded-header {
+  background-color: #F4F4F4;
+  height: 651px;
+  display: flex;
+  justify-content: center;
+}
+
+.longwinded-header__wrapper {
+  height: 651px;
+  width: 1402px;
+  min-width: 1402px;
+  display: flex;
+  background: url("../mockups/ipad.png") no-repeat right 0 bottom -77px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.longwinded-header__content {
+  color: #7F7F7F;
+  width: 554px;
+  height: 900px;
+  margin-top: 112px;
+  margin-left: 232px;
+}
+
+.longwinded-header__content h2 {
+  font-size: 37px;
+  font-weight: normal;
+  color: #535353;
+}
+
+.longwinded-header__say-hello-btn {
+  font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  border-radius: 2px;
+  background: transparent;
+  padding: 18px 30px;
+  cursor: pointer;
+  color: #14af8f;
+  border: 2px solid #14af8f;
+}
+
+.longwinded-header__content p {
+  line-height: 24px;
+}
+
+.longwinded-header__content blockquote {
+  line-height: 24px;
+  font-style: italic;
+}
+
+.longwinded-header__quote-block {
+  display: flex;
+  margin-bottom: 66px;
+  margin-top: 27px;
+}
+
+.longwinded-header__quote-line {
+  width: 17px;
+  height: 68px;
+  margin-right: 17px;
+  background-color: #00AEE0;
+}
+
+.longwinded-header__quote {
+  margin: 0;
+}
+
+.longwinded-header__content .fa-envelope {
+  padding-left: 14px;
+}
+
+/* Get a dog up ya section */
+
+.get-a-dog-up-ya {
+  height: 649px;
+  display: flex;
+  justify-content: center;
+}
+
+.get-a-dog-up-ya__wrapper {
+  background: url("../mockups/devices.png") no-repeat left -34px bottom -61px;
+  font-family: "Montserrat", sans-serif;
+  height: 649px;
+  width: 1402px;
+}
+
+.get-a-dog-up-ya__content {
+  width: 375px;
+  margin-top: 97px;
+  margin-left: 750px;
+}
+
+.get-a-dog-up-ya__content h2 {
+  font-size: 37px;
+  font-weight: normal;
+  color: #535353;
+  margin-bottom: 35px;
+}
+
+.get-a-dog-up-ya__content p {
+  line-height: 24px;
+}
+
+.get-a-dog-up-ya__content p:nth-child(2) {
+  font-weight: bold;
+  font-style: italic;
+  margin-bottom: 27px;
+  color: #4E5766;
+
+}
+
+.get-a-dog-up-ya__content p:nth-child(3) {
+  margin-bottom: 57px;
+  color: #808080;
+}
+
+.get-a-dog-up-ya__view-on-dribbble-btn .fa-dribbble {
+  margin-left: 9px;
+}
+
+.get-a-dog-up-ya__view-on-dribbble-btn {
+  font-size: 14px;
+  border-radius: 2px;
+  background: transparent;
+  padding: 18px 30px;
+  cursor: pointer;
+  color: #FF4B8C;
+  border: 2px solid #FF4B8C;
+}
+
+/* Like what you see section */
+
+.like-what-you-see {
+  background: url("../mockups/green-pattern.jpg");
+  font-family: "Montserrat", sans-serif;
+  height: 326px;
+  display: flex;
+  justify-content: center;
+}
+
+.like-what-you-see__wrapper {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  height: 326px;
+  width: 1402px;
+}
+
+.like-what-you-see__content h2 {
+  font-size: 39px;
+  font-weight: normal;
+  color: white;
+  margin-bottom: 33px;
+  margin-top: 93px;
+}
+
+.like-what-you-see__buy-me-a-beer-btn {
+  font-size: 14px;
+  border-radius: 2px;
+  background: transparent;
+  padding: 18px 33px;;
+  cursor: pointer;
+  color: white;
+  border: 2px solid white;
+}
+
+.fa-beer {
+  margin-left: 20px;
+}
+
+/* Contact us section*/
+
+.contact-us {
+  background-color: #F4F4F4;
+  font-family: "Montserrat", sans-serif;
+  height: 649px;
+  display: flex;
+  justify-content: center;
+}
+
+.contact-us__wrapper {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  height: 649px;
+  width: 1402px;
+}
+
+.contact-us__icon {
+  color: #525252;
+  font-size: 20px;
+  border: solid 3px #525252;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 48px !important;
+}
+
+.contact-us__navigation {
+  margin-top: 240px;
+  width: 330px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.contact-us__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-us__send-email-form {
+  display: flex;
+  margin-top: 68px;
+}
+
+.contact-us__input-block {
+  height: 34px;
+  width: 207px;
+  display: flex;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.contact-us__input {
+  border: none;
+  padding-left: 13px;
+  outline: none;
+  width: 146px;
+}
+
+.contact-us__input::placeholder {
+  font-style: italic;
+  font-weight: bold;
+  color: #EAEAEA;
+}
+
+.contact-us__line {
+  background-color: #EAEAEA;
+  width: 1px;
+  height: 14px;
+  margin-top: 11px;
+  margin-right: 17px;
+}
+
+.contact-us__send-email-btn {
+  font-family: "Montserrat", sans-serif;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.contact-us__send-email-form label {
+  padding-top: 13px;
+  padding-right: 23px;
+}
+
+.contact-us__send-email-btn .fa-envelope {
+  color: #00C5EC;
+  font-size: 15px;
+}
+
+.contact-us__label {
+  color: #525252;
+}
+
+/* Footer */
+
+.footer {
+  display: flex;
+  justify-content: center;
+}
+
+.footer__wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 101px;
+  width: 1402px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  color: #525252;
+  padding-top: 5px;
+}
+
+.footer__perth-link {
+  text-decoration: none;
+  color: #00C5EC;
+}
+
+.footer__up-button {
+  color: #525252;
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  right: 103px;
+  top: 32px;
+  border-radius: 5px;
+  background-color: #F4F4F4;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
