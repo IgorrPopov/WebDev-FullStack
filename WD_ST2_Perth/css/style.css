@@ -7,12 +7,15 @@ html, body {
   margin: 0;
   padding: 0;
   max-width: 100%;
+  min-width: 320px;
   overflow-x: hidden;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* Header */
 
 .header {
+  position: relative;
   background: url("../mockups/blue-pattern.jpg");
   height: 651px;
   display: flex;
@@ -44,15 +47,21 @@ html, body {
 }
 
 .menu-icon {
-  display: inline-block;
-  width: 34px;
-  height: 24px;
-  margin-left: 807px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+  margin-right: 203px;
+  height: 26px;
+}
+
+.menu-icon__button {
   cursor: pointer;
+  z-index: 2;
 }
 
 .menu-icon__line {
-  margin: 2px;
+  margin-top: 2px;
   width: 31px;
   height: 4px;
   background-color: #FFFFFF;
@@ -64,6 +73,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-right: 194px;
 }
 
 .header__bottom-part h1 {
@@ -71,33 +81,91 @@ html, body {
   font-weight: 100;
   font-size: 72px;
   padding-top: 5px;
-  padding-right: 193px;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
 .header__bottom-part p {
-  font-family: "Montserrat", sans-serif;
-  font-size: 34px;
+  font-size: 31px;
   margin-top: 15px;
-  padding-right: 192px;
 }
 
-.header__download-btn {
-  margin-right: 204px;
-  margin-top: 14px;
+.btn {
   font-size: 14px;
-  font-family: "Montserrat", sans-serif;
-  border: 2px solid #FFFFFF;
-  border-radius: 2px;
   background: transparent;
-  color: #FFFFFF;
-  padding: 18px 28px;
   cursor: pointer;
+  border-radius: 2px;
+  border: 2px solid #FFFFFF;
+  color: #FFFFFF;
+}
+
+.btn--white {
+  margin-right: 10px;
+  margin-top: 17px;
+  padding: 18px 28px;
 }
 
 .fa-cloud-download-alt {
   padding-left: 9px;
+}
+
+/* Navigation */
+
+.navigation {
+  opacity: 0.9;
+  width: 100%;
+  height: 651px;
+  position: absolute;
+  background-color: #f37779;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+
+.navigation--invisible {
+  z-index: -1;
+}
+
+.navigation__list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.navigation__icon {
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.navigation__list i {
+  color: #4eacdd;
+  font-size: 18px;
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px !important;
+}
+
+.navigation span {
+  color: white;
+  font-size: 16px;
+  margin-left: 20px;
+}
+
+.menu-icon__line--first-transform {
+  transform: rotate(-45deg) translate(-5px, 5px);
+  z-index: 1;
+}
+
+.menu-icon__line--fourth-transform {
+  transform: rotate(45deg) translate(-8px, -8px);
+  z-index: 1;
+}
+
+.menu-icon__line--zero-opacity {
+  opacity: 0;
 }
 
 /* Longwinded Header */
@@ -115,14 +183,13 @@ html, body {
   min-width: 1402px;
   display: flex;
   background: url("../mockups/ipad.png") no-repeat right 0 bottom -77px;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .longwinded-header__content {
   color: #7F7F7F;
   width: 554px;
   height: 900px;
-  margin-top: 112px;
+  margin-top: 109px;
   margin-left: 232px;
 }
 
@@ -132,24 +199,15 @@ html, body {
   color: #535353;
 }
 
-.longwinded-header__say-hello-btn {
-  font-size: 14px;
-  font-family: "Montserrat", sans-serif;
-  border-radius: 2px;
-  background: transparent;
-  padding: 18px 30px;
-  cursor: pointer;
-  color: #14af8f;
-  border: 2px solid #14af8f;
-}
-
 .longwinded-header__content p {
   line-height: 24px;
+  font-size: 15px;
 }
 
 .longwinded-header__content blockquote {
   line-height: 24px;
   font-style: italic;
+  font-size: 15px;
 }
 
 .longwinded-header__quote-block {
@@ -173,6 +231,12 @@ html, body {
   padding-left: 14px;
 }
 
+.btn--green {
+  padding: 18px 30px;
+  color: #14af8f;
+  border-color: #14af8f;
+}
+
 /* Get a dog up ya section */
 
 .get-a-dog-up-ya {
@@ -182,16 +246,22 @@ html, body {
 }
 
 .get-a-dog-up-ya__wrapper {
-  background: url("../mockups/devices.png") no-repeat left -34px bottom -61px;
-  font-family: "Montserrat", sans-serif;
+  background: url("../mockups/devices.png") no-repeat left -35px bottom -61px;
+  background-size: 63.9%;
   height: 649px;
   width: 1402px;
 }
 
+.get-a-dog-up-ya__content-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .get-a-dog-up-ya__content {
-  width: 375px;
-  margin-top: 97px;
-  margin-left: 750px;
+  width: 388px;
+  margin-top: 64px;
+  margin-right: 213px;
 }
 
 .get-a-dog-up-ya__content h2 {
@@ -206,37 +276,33 @@ html, body {
 }
 
 .get-a-dog-up-ya__content p:nth-child(2) {
+  font-size: 15px;
   font-weight: bold;
   font-style: italic;
   margin-bottom: 27px;
   color: #4E5766;
-
 }
 
 .get-a-dog-up-ya__content p:nth-child(3) {
+  font-size: 15px;
   margin-bottom: 57px;
   color: #808080;
 }
 
-.get-a-dog-up-ya__view-on-dribbble-btn .fa-dribbble {
-  margin-left: 9px;
+.btn--pink {
+  padding: 18px 30px;
+  color: #FF4B8C;
+  border-color: #FF4B8C;
 }
 
-.get-a-dog-up-ya__view-on-dribbble-btn {
-  font-size: 14px;
-  border-radius: 2px;
-  background: transparent;
-  padding: 18px 30px;
-  cursor: pointer;
-  color: #FF4B8C;
-  border: 2px solid #FF4B8C;
+.btn--pink .fa-dribbble {
+  margin-left: 9px;
 }
 
 /* Like what you see section */
 
 .like-what-you-see {
   background: url("../mockups/green-pattern.jpg");
-  font-family: "Montserrat", sans-serif;
   height: 326px;
   display: flex;
   justify-content: center;
@@ -251,21 +317,15 @@ html, body {
 }
 
 .like-what-you-see__content h2 {
-  font-size: 39px;
+  font-size: 36px;
   font-weight: normal;
   color: white;
-  margin-bottom: 33px;
-  margin-top: 93px;
+  margin-bottom: 37px;
+  margin-top: 90px;
 }
 
-.like-what-you-see__buy-me-a-beer-btn {
-  font-size: 14px;
-  border-radius: 2px;
-  background: transparent;
+.btn--white-beer{
   padding: 18px 33px;;
-  cursor: pointer;
-  color: white;
-  border: 2px solid white;
 }
 
 .fa-beer {
@@ -276,7 +336,6 @@ html, body {
 
 .contact-us {
   background-color: #F4F4F4;
-  font-family: "Montserrat", sans-serif;
   height: 649px;
   display: flex;
   justify-content: center;
@@ -320,11 +379,11 @@ html, body {
 }
 
 .contact-us__input-block {
-  height: 34px;
+  height: 33px;
   width: 207px;
   display: flex;
-  background-color: #FFFFFF;
-  border-radius: 5px;
+  background-color: white;
+  border-radius: 8px;
   padding: 5px;
 }
 
@@ -332,7 +391,7 @@ html, body {
   border: none;
   padding-left: 13px;
   outline: none;
-  width: 146px;
+  width: 142px;
 }
 
 .contact-us__input::placeholder {
@@ -350,7 +409,6 @@ html, body {
 }
 
 .contact-us__send-email-btn {
-  font-family: "Montserrat", sans-serif;
   border: none;
   background: transparent;
   padding: 0;
@@ -387,7 +445,6 @@ html, body {
   align-items: center;
   height: 101px;
   width: 1402px;
-  font-family: "Montserrat", sans-serif;
   font-size: 12px;
   color: #525252;
   padding-top: 5px;
@@ -411,4 +468,313 @@ html, body {
   border: none;
   cursor: pointer;
   outline: none;
+}
+
+/* Italic and Bold */
+
+.is-bold {
+  font-weight: bold;
+}
+
+.is-italic {
+  font-style: italic;
+}
+
+/* ----------------------------------------------------------- */
+/* Media queries */
+
+@media screen and (max-width: 1200px) {
+  .get-a-dog-up-ya__content {
+    margin-right: 80px;
+  }
+
+  .longwinded-header__content {
+    margin-left: 325px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .header__bottom-part {
+    margin-right: 100px;
+    margin-left: 100px;
+  }
+
+  .longwinded-header__content {
+    margin-left: 400px;
+  }
+
+  .header__bottom-part p {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .header__bottom-part p {
+    margin-left: 325px;
+  }
+
+  .header, .navigation {
+    height: 525px;
+  }
+
+  .header__wrapper {
+    background: url(../mockups/iphone.png) no-repeat left 93px bottom -214px;
+    height: 525px;
+  }
+
+  .longwinded-header__content {
+    margin-left: 335px;
+    margin-top: 50px;
+  }
+
+  .longwinded-header {
+    height: 525px;
+  }
+
+  .longwinded-header__wrapper {
+    height: 525px;
+    background: url(../mockups/ipad.png) no-repeat right 80px bottom -140px;
+  }
+
+  .get-a-dog-up-ya__content {
+    margin-top: 30px;
+    width: 375px;
+    margin-right: 50px;
+  }
+
+  .get-a-dog-up-ya__content p {
+    font-size: 15px;
+  }
+
+  .get-a-dog-up-ya, .get-a-dog-up-ya__wrapper {
+    height: 430px;
+  }
+
+  .btn--pink {
+    margin-left: 130px;
+  }
+
+  .header__square-logo {
+    margin-left: 100px;
+  }
+
+  .menu-icon {
+    margin-right: 100px;
+  }
+
+  .contact-us, .contact-us__wrapper {
+    height: 400px;
+  }
+
+  .contact-us__navigation {
+    margin-top: 130px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .header__bottom-part p {
+    margin-left: 260px;
+    font-size: 22px;
+  }
+
+  .header__bottom-part {
+    margin-right: 70px;
+  }
+
+  .longwinded-header__content {
+    width: 390px;
+    margin-left: 385px;
+    margin-top: 26px;
+  }
+
+  .longwinded-header__wrapper {
+    background: url(../mockups/ipad.png) no-repeat right 180px bottom -140px;
+  }
+
+  .longwinded-header__quote-block {
+    margin-bottom: 28px;
+  }
+
+  .longwinded-header__quote-line {
+    width: 21px;
+    height: 119px;
+  }
+
+  .get-a-dog-up-ya__wrapper {
+    background: url(../mockups/devices.png) no-repeat left -100px bottom 0px;
+    background-size: 63.9%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .header, .navigation {
+    height: 670px;
+  }
+
+  .header__wrapper {
+    background: url(../mockups/iphone.png) no-repeat center bottom -255px;
+    height: 670px;
+  }
+
+  .header__bottom-part {
+    align-items: center;
+    margin-right: 30px;
+    margin-left: 30px;
+  }
+
+  .header__bottom-part p {
+    margin-left: 0;
+  }
+
+  .longwinded-header__quote-line {
+    height: 145px;
+  }
+
+  .longwinded-header {
+    height: 700px;
+  }
+
+  .longwinded-header__wrapper {
+    display: flex;
+    justify-content: center;
+    height: 700px;
+    background: url(../mockups/ipad.png) no-repeat center;
+  }
+
+  .longwinded-header__content {
+    padding-top: 80px;
+    margin-left: 0;
+    width: 328px;
+  }
+
+  .longwinded-header__content h2 {
+    font-size: 25px;
+    text-align: center;
+  }
+
+  .btn--green {
+    margin-left: 77px;
+  }
+
+  .get-a-dog-up-ya__content-block {
+    align-items: center;
+  }
+
+  .get-a-dog-up-ya__content {
+    margin-right: 0;
+  }
+
+  .get-a-dog-up-ya__content p:nth-child(3) {
+    margin-bottom: 24px;
+  }
+
+  .get-a-dog-up-ya__wrapper {
+    background: url(../mockups/devices.png) no-repeat center bottom 0px;
+    background-size: 350px;
+  }
+
+  .btn--pink {
+    margin-left: 0;
+  }
+
+  .get-a-dog-up-ya, .get-a-dog-up-ya__wrapper {
+    height: 570px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header, .header__wrapper, .navigation {
+    height: 620px;
+  }
+
+  .header__bottom-part h1 {
+    font-size: 50px;
+  }
+
+  .header__bottom-part p {
+    font-size: 18px;
+  }
+
+  .header__square-logo {
+    margin-left: 50px;
+  }
+
+  .menu-icon {
+    margin-right: 50px;
+  }
+
+  .longwinded-header__content h2 {
+    font-size: 24px;
+  }
+
+  .longwinded-header__content p, blockquote {
+    line-height: 20px;
+    font-size: 15px;
+  }
+
+  .longwinded-header__content {
+    width: 280px;
+  }
+
+  .btn--green {
+    margin-left: 52px;
+  }
+
+  .btn--pink {
+    margin-left: 0px;
+  }
+
+  .longwinded-header__quote-line {
+    height: 168px;
+    width: 34px;
+  }
+
+  .longwinded-header__wrapper {
+    background-size: 420px;
+  }
+
+  .longwinded-header__quote-line {
+    height: 167px;
+  }
+
+  .get-a-dog-up-ya__content {
+    text-align: center;
+    width: 300px;
+  }
+
+  .get-a-dog-up-ya__content h2 {
+    font-size: 35px;
+  }
+
+  .get-a-dog-up-ya__content p:nth-child(3) {
+    margin-bottom: 15px;
+  }
+
+  .contact-us__navigation {
+    flex-wrap: wrap;
+    width: 150px;
+    margin: 40px 0 0 0;
+  }
+
+  .contact-us__navigation a {
+    margin-bottom: 32px;
+  }
+
+  .contact-us__send-email-form {
+    flex-wrap: wrap;
+    width: 217px;
+    margin-top: 68px;
+    text-align: center;
+  }
+
+  .contact-us__send-email-form label {
+    padding: 0 0 10px 17px;
+  }
+
+  .footer__up-button {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
 }
