@@ -1,0 +1,2 @@
+- require PHP version 7.3.6 or higher
+- tested on XAMPP for Linux 7.3.6
