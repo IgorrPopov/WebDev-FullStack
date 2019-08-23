@@ -33,6 +33,7 @@ nav a {
     text-decoration: none;
     text-transform: uppercase;
     float: left;
+    cursor: pointer;
 }
 
 nav a.active {
@@ -102,7 +103,12 @@ nav a.active {
     max-width: 40px;
 }
 
-.forecast-icon svg {
+.small-icon {
     width: 35px;
+    height: 35px;
     transform: translateY(31%);
+}
+
+.large-icon {
+    margin-top: 4px;
 }

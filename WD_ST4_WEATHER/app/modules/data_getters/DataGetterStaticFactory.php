@@ -2,7 +2,6 @@
 
 namespace App\Modules\DataGetters;
 
-
 final class DataGetterStaticFactory
 {
 

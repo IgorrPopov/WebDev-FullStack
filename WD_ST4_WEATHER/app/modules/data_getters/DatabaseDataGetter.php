@@ -7,13 +7,9 @@ use PDO;
 class DatabaseDataGetter implements iDataGetter
 {
 
-    private $dbConfig;
-
     public function getWeatherForecast(array $config): array
     {
-        $this->dbConfig = $config['dbConfig'];
-
-        $conn = $this->getConnection();
+        $conn = $this->getConnection($config['dbConfig']);
 
         $sql = 'SELECT 
                 forecast.timestamp, 
@@ -24,14 +20,22 @@ class DatabaseDataGetter implements iDataGetter
 
         $stm = $conn->query($sql);
 
-        return $stm->fetchAll(PDO::FETCH_ASSOC);
+        $rawForecastArray = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($rawForecastArray === false) {
+            throw new \Exception('An error occurred "Database is corrupted"');
+        }
+
+        return $rawForecastArray;
     }
 
-    private function getConnection() {
+
+    private function getConnection(array $dbConfig): PDO
+    {
         $connection = new PDO(
-            'mysql:host=' . $this->dbConfig['serverName'] . ';dbname=' . $this->dbConfig['dbName'],
-             $this->dbConfig['userName'],
-             $this->dbConfig['password']
+            'mysql:host=' . $dbConfig['serverName'] . ';dbname=' . $dbConfig['dbName'],
+             $dbConfig['userName'],
+             $dbConfig['password']
         );
 
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

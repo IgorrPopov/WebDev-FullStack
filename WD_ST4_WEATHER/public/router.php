@@ -10,10 +10,14 @@ $config = require_once
     'config.php';
 
 
-if (isset($_GET['data_source_type']) && in_array($_GET['data_source_type'], $config['dataSourceType'])) {
+if (isset($_GET['data_source_type']) && in_array($_GET['data_source_type'], $config['dataSourceTypes'], true)) {
 
     require_once $config['pathToHandler'];
 
 } else {
-// do something
+
+    http_response_code(404);
+
+    echo json_encode(['error_message' => 'Requested data source type not found']);
+
 }
